@@ -3,3 +3,23 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+:root {
+  /* light mode */
+  --cyber-grape: #4E416Cff;
+  --onyx: #3D3D3Fff;
+  --ghost-white: #F6F7FBff;
+  --tumbleweed: #E9AD8Fff;
+  --zomp: #3AA589ff;
+  --white: #FFFFFFff;
+  --puce: #C37E91ff;
+
+  /* dark mode*/
+  --sheen-green: #A3DA30ff;
+  --key-lime: #F3FB8Aff;
+  --raisin-black: #1D1E23ff;
+  --lavender-floral: #B785F6ff;
+  --eerie-black: #16171Bff;
+  --white: #FBFBFCff;
+}
+
