@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
               --primary: #F3FB8Aff;
               --secondary: #B785F6ff;
               --warning: #A3DA30ff;
-              --dander: #C37E91ff;
+              --danger: #C37E91ff;
             `;
           default:
             return css `
@@ -27,6 +27,6 @@ export const GlobalStyle = createGlobalStyle`
         }
     }}
     color: var(--main-color);
-    background-color: var(--bg-color-main);
+    background-color: var(--bg-color-darken);
   }
 `
