@@ -1,25 +1,21 @@
+import { useState } from 'react'
 import styled from "styled-components"
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
 
 
 function App() {
+  const [user, setUser] = useState(null) 
 
   return (
-    <> 
-      <Block></Block>
-    <Text>HELLO</Text>
-    </>
+    <Routes>
+      <Route path="/" element={user ? <Home /> : <Navigate to="/login" replace={true} /> } />
+      <Route path="/login" element={user ? <Navigate to="/" replace={true} /> : <Login />} />
+      <Route path="/signup" element={user ? <Navigate to="/" replace={true} /> : <SignUp />} />
+    </Routes>
   )
 }
-
-
-const Block = styled.div `
-  width: 50px;
-  height: 50px;  
-  background-color: var(--warning);
-`
-
-const Text = styled.h1`
-  font-size: 2rem;
-`
 
 export default App
