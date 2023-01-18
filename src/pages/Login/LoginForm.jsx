@@ -21,7 +21,7 @@ function LoginForm() {
       {
         method: 'POST',
         url: authAPI.login,
-        body: formData
+        data: { ...formData }
       },
       (data) => console.log(data)
     )
