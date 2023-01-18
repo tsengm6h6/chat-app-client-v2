@@ -1,28 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { Container } from '../../components/MainContainer'
-import Navbar from '../../components/Navbar'
 import ChatRecordList from '../Chat/ChatRecordList'
 import ChatRoom from '../Chat/ChatRoom'
+import { useChatContext } from '../../context/ChatContext'
 
 function Home() {
-  const [chatId, setChatId] = useState('hi')
-  const [show, setShow] = useState(false)
+  const { chatId } = useChatContext()
+  console.log(chatId)
 
   return (
-    <>
-      <Navbar />
-      <Wrapper>
-        <ChatContainer onClick={() => setShow(true)}>
-          <ChatRecordList />
-        </ChatContainer>
-        <RoomContainer 
-          
-          className={show ? 'show' : null}>
-          <ChatRoom />
-        </RoomContainer>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <ChatContainer>
+        <ChatRecordList />
+      </ChatContainer>
+      <RoomContainer className={chatId ? 'show' : null}>
+        <ChatRoom key={chatId} />
+      </RoomContainer>
+    </Wrapper>
   )
 }
 
@@ -53,11 +48,10 @@ const RoomContainer = styled(ChatContainer) `
   position: absolute;
   top: 0;
   left: 0;
-  transform: translateX(100%) scale(0, 1);
-  transform-origin: right;
-  opacity: 0;
-  transition: 0.3s all ease-in-out;
   overflow: hidden;
+  transform: translateX(50%) scale(0, 1);
+  transform-origin: right;
+  transition: transform 0.3s ease-in-out;
 
   &.show {
     transform: translateX(0) scale(1, 1);

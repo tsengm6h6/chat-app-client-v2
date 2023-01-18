@@ -2,13 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import ListItem from './ChatListItem'
 import { fakeRecord } from '../../data/fakeRecord'
+import { useChatContext } from '../../context/ChatContext'
 
 
 function ChatRecordList() {
+  const { setChatId } = useChatContext()
 
   const renderedRecord = fakeRecord.map(record => {
     return (
-      <ListItem key={record.id} {...record}  />
+      <ListItem 
+        key={record.id}
+        handleItemClick={() => setChatId(record.id)}
+        {...record} />
     )
   })
 

@@ -1,39 +1,84 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { fakeMessage } from '../../data/fakeMessage'
 import ChatMessage from '../Chat/ChatMessage'
 import { IoArrowUndo, IoSend } from "react-icons/io5";
 import { MultiAvatar } from '../../components/Avatar';
+import { useChatContext } from '../../context/ChatContext'
 
 function ChatRoom() {
-  const renderedMessage = fakeMessage.map(msg => {
+  const { setChatId, chatRoomInfo, chatMessage } = useChatContext()
+  const [ realTimeMessage, setRealTimeMessages ] = useState(chatMessage)
+  const [ inputMessage, setInputMessage ] = useState('')
+
+  const msgRef = useRef(null)
+
+  useEffect(() => {
+    msgRef.current.scrollIntoView()
+  }, [realTimeMessage])
+
+  const renderedMessage = realTimeMessage.map(msg => {
     return (
-      <ChatMessage key={msg.id} {...msg} />
+      <ChatMessage key={msg.id} {...msg} ref={msgRef} />
     )
   })
+
+  const renderHeader = chatRoomInfo === null ? null : (
+    <RoomHeader>
+      <HeaderIcon onClick={() => setChatId(null)}>
+        <IconWrapper>
+          <IoArrowUndo />
+        </IconWrapper>
+      </HeaderIcon>
+      <HeaderName>{chatRoomInfo.name}</HeaderName>
+      <HeaderMembers>
+        <MultiAvatar size="small" src={chatRoomInfo.avatar} />
+        <MultiAvatar size="small" src="/talking.png" />
+        <MultiAvatar size="small" src="/vite.svg" />
+        <MultiAvatar size="small" src="/vite.svg" />
+      </HeaderMembers>
+    </RoomHeader>
+  ) 
+  
+  const handleInputSubmit = (e) => {
+    e.preventDefault()
+    console.log(inputMessage)
+    // TODO: 
+    // post message to api
+    // add return message data to realTimeMessage
+    // socket to others
+    setRealTimeMessages(prev => {
+      return [
+        ...prev,
+        {
+          id: Math.random(),
+          avatar: "/vite.svg",
+          name: "Jessic Woo",
+          text: inputMessage,
+          time: "09:00",
+          unread: 0
+        }
+      ]
+    })
+    setInputMessage('')
+  }
+
   return (
     <RoomWrapper>
-      <RoomHeader>
-        <HeaderIcon>
-          <IconWrapper>
-            <IoArrowUndo />
-          </IconWrapper>
-        </HeaderIcon>
-        <HeaderName>John Doe</HeaderName>
-        <HeaderMembers>
-          <MultiAvatar size="small" src="/vite.svg" />
-          <MultiAvatar size="small" src="/talking.png" />
-          <MultiAvatar size="small" src="/vite.svg" />
-          <MultiAvatar size="small" src="/vite.svg" />
-        </HeaderMembers>
-      </RoomHeader>
+      {renderHeader}
       <RoomMessage>
         {renderedMessage}
         {renderedMessage}
         {renderedMessage}
       </RoomMessage>
-      <RoomField>
-        <RoomInput />
+      <RoomField onSubmit={handleInputSubmit}>
+        <RoomInput
+          type="text"
+          name="inputMessage"
+          placeholder='Type something'
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+        />
         <RoomInputButton>
           <ButtonIconWrapper>
             <IoSend/>
@@ -71,10 +116,10 @@ const RoomHeader = styled.div `
 const RoomMessage = styled.div `
   flex: 1;
   overflow: auto;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0.5rem;
 `
 
-const RoomField = styled.div `
+const RoomField = styled.form `
   margin: 0.5rem;
   height: 55px;
   background-color: var(--bg-color-darken);

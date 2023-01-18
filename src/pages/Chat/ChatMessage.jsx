@@ -1,20 +1,32 @@
-import React from 'react'
+import React, { forwardRef, useRef, useImperativeHandle } from 'react'
 import styled from 'styled-components'
 import Avatar from '../../components/Avatar'
 
-function ChatMessage({ avatar, id, name, text, time, unread }) {
-  const userId = [3, 5, 6, 8]
-  const fromSelf = userId.includes(id)
+const ChatMessage = forwardRef(
+  function ChatMessage({ avatar, id, name, text, time, unread }, ref) {
+    const messageRef = useRef(null)
 
-  console.log(id, fromSelf)
+    useImperativeHandle(ref, () => {
+      return {
+        scrollIntoView() {
+          messageRef.current.scrollIntoView({
+            behavior: 'smooth'
+          })
+        }
+      }
+    }, [])
 
-  return (
-    <Message className={fromSelf ? 'self' : null }>
-      <Avatar size="medium" src={avatar} />
-      <Text className={fromSelf ? 'self' : null }>{text}</Text>
-    </Message>
-  )
-}
+    const userId = [3]
+    const fromSelf = userId.includes(id)
+  
+    return (
+      <Message className={fromSelf ? 'self' : null } ref={messageRef}>
+        <Avatar size="medium" src={avatar} />
+        <Text className={fromSelf ? 'self' : null }>{text}</Text>
+      </Message>
+    )
+  }
+)
 
 const Message = styled.div `
   display: flex;

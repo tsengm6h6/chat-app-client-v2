@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import Avatar from '../../components/Avatar'
 
-function ChatListItem({ avatar, name, text, time, unread }) {
+function ChatListItem({ avatar, name, text, time, unread, handleItemClick }) {
   return (
-    <ListItem>
+    <ListItem onClick={handleItemClick}>
         <Avatar src={ avatar } alt="avatar" />
         <ListContent>
           <TitleBox>
@@ -32,6 +32,7 @@ const ListItem = styled.li `
   gap: 1rem;
   background-color: var(--bg-color-darken);
   border-radius: 8px;
+  cursor: pointer;
 `
 
 const ListContent = styled.div `
