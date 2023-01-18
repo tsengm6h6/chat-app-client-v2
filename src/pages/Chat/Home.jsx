@@ -17,7 +17,7 @@ function Home() {
           <ChatRecordList />
         </ChatContainer>
         <RoomContainer 
-          onClick={() => setShow(false)}
+          
           className={show ? 'show' : null}>
           <ChatRoom />
         </RoomContainer>
@@ -41,7 +41,7 @@ const ChatContainer = styled(Container) `
   height: calc(100vh - 80px);
   background-color: var(--bg-color-main);
   align-items: flex-start;
-  padding: 2rem 0 1rem;
+  padding: 0 0 ;
 
   @media screen and (min-width: 768px) {
     max-width: calc(480px + 2rem);
@@ -49,7 +49,7 @@ const ChatContainer = styled(Container) `
 `
 
 const RoomContainer = styled(ChatContainer) `
-  padding: 0 1rem;
+  padding: 0;
   position: absolute;
   top: 0;
   left: 0;
@@ -57,6 +57,7 @@ const RoomContainer = styled(ChatContainer) `
   transform-origin: right;
   opacity: 0;
   transition: 0.3s all ease-in-out;
+  overflow: hidden;
 
   &.show {
     transform: translateX(0) scale(1, 1);
@@ -67,6 +68,7 @@ const RoomContainer = styled(ChatContainer) `
     position: relative;
     transform: translateX(0) scale(1, 1);
     opacity: 1;
+    transition: none;
     max-width: 100%;
   }
 `

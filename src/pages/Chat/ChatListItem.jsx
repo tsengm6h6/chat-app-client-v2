@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Avatar from '../../components/Avatar'
 
 function ChatListItem({ avatar, name, text, time, unread }) {
   return (
@@ -31,14 +32,6 @@ const ListItem = styled.li `
   gap: 1rem;
   background-color: var(--bg-color-darken);
   border-radius: 8px;
-`
-
-const Avatar = styled.img `
-  width: 60px;
-  height: 60px;
-  background-color: var(--warning);
-  border-radius: 50%;
-  object-fit: cover;
 `
 
 const ListContent = styled.div `
