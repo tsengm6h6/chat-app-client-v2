@@ -11,7 +11,7 @@ import ChatContextProvider from './context/ChatContext'
 
 
 function App() {
-  const [user, setUser] = useState({ name: 'Yutzu' }) 
+  const [user, setUser] = useState(null) 
   const [mode, setMode] = useState('light')
 
   return (

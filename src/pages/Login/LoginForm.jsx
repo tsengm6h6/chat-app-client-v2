@@ -4,6 +4,8 @@ import TextInput from '../../components/TextInput'
 import { PrimaryButton } from '../../components/Button'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { useAxios } from '../../hooks/useAxios'
+import { authAPI } from '../../api'
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -11,9 +13,18 @@ function LoginForm() {
     password: ''
   }) 
 
+  const { error, isLoading, sendRequest: postLogin } = useAxios()
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('submit', formData)
+    postLogin(
+      {
+        method: 'POST',
+        url: authAPI.login,
+        body: formData
+      },
+      (data) => console.log(data)
+    )
   }
 
   const handleInputChange = (e) => {
