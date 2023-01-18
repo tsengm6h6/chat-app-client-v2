@@ -7,14 +7,16 @@ import { MultiAvatar } from '../../components/Avatar';
 import { useChatContext } from '../../context/ChatContext'
 
 function ChatRoom() {
-  const { setChatId, chatRoomInfo, chatMessage } = useChatContext()
+  const { chatId, setChatId, chatRoomInfo, chatMessage } = useChatContext()
   const [ realTimeMessage, setRealTimeMessages ] = useState(chatMessage)
   const [ inputMessage, setInputMessage ] = useState('')
 
   const msgRef = useRef(null)
 
   useEffect(() => {
-    msgRef.current.scrollIntoView()
+    if (msgRef.current) {
+      msgRef.current.scrollIntoView()
+    }
   }, [realTimeMessage])
 
   const renderedMessage = realTimeMessage.map(msg => {
@@ -67,30 +69,41 @@ function ChatRoom() {
     <RoomWrapper>
       {renderHeader}
       <RoomMessage>
-        {renderedMessage}
-        {renderedMessage}
-        {renderedMessage}
+        { chatId 
+          ? renderedMessage 
+          : (
+            <RoomWelcomMessage>
+              Select a user to start a chat
+            </RoomWelcomMessage>
+          )
+        }
       </RoomMessage>
-      <RoomField onSubmit={handleInputSubmit}>
-        <RoomInput
-          type="text"
-          name="inputMessage"
-          placeholder='Type something'
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-        />
-        <RoomInputButton>
-          <ButtonIconWrapper>
-            <IoSend/>
-          </ButtonIconWrapper>
-        </RoomInputButton>
-      </RoomField>
+      {
+        chatId
+        ? (
+          <RoomField onSubmit={handleInputSubmit}>
+            <RoomInput
+              type="text"
+              name="inputMessage"
+              placeholder='Type something'
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+            />
+            <RoomInputButton>
+              <ButtonIconWrapper>
+                <IoSend/>
+              </ButtonIconWrapper>
+            </RoomInputButton>
+          </RoomField>
+        )
+        : null
+      }
     </RoomWrapper>
   )
 }
 
 const RoomWrapper = styled.div `
-  margin: 1rem 0;
+  margin: 1rem 0 0;
   width: 100%;
   height: calc(100% - 1rem);
   background-color: var(--bg-color-main);
@@ -117,6 +130,18 @@ const RoomMessage = styled.div `
   flex: 1;
   overflow: auto;
   padding: 1.5rem 1.5rem 0.5rem;
+`
+
+const RoomWelcomMessage = styled.div `
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-color-main);
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 600;
 `
 
 const RoomField = styled.form `

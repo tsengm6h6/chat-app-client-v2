@@ -49,19 +49,17 @@ const RoomContainer = styled(ChatContainer) `
   top: 0;
   left: 0;
   overflow: hidden;
-  transform: translateX(50%) scale(0, 1);
+  transform: translateX(100%) scale(0, 1);
   transform-origin: right;
   transition: transform 0.3s ease-in-out;
 
   &.show {
     transform: translateX(0) scale(1, 1);
-    opacity: 1;
   }
 
   @media screen and (min-width: 768px) {
     position: relative;
     transform: translateX(0) scale(1, 1);
-    opacity: 1;
     transition: none;
     max-width: 100%;
   }
