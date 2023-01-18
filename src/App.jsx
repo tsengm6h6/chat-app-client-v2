@@ -2,14 +2,14 @@ import { useState } from 'react'
 import styled, { ThemeProvider } from "styled-components"
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { GlobalStyle } from './utils/style'
-import Home from './pages/Home'
+import Home from './pages/Chat/Home'
 import Login from './pages/Login/Login'
 import SignUp from './pages/SignUp/SignUp'
 import './App.css'
 
 
 function App() {
-  const [user, setUser] = useState(null) 
+  const [user, setUser] = useState({ name: 'Yutzu' }) 
   const [mode, setMode] = useState('light')
 
   return (
