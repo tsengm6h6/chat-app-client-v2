@@ -3,7 +3,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const AuthContext = createContext(null)
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuthContext = () => useContext(AuthContext)
 
 export default function AuthContextProvider({ children }) {
   const [user, setUser] = useLocalStorage('chat-app-user', null)

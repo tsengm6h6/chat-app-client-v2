@@ -1,28 +1,43 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { HiOutlineSun, HiOutlineMoon } from 'react-icons/hi2'
+import { HiOutlineSun, HiOutlineMoon, HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2'
 import { ThemeContext } from 'styled-components'
-import { useAuth } from '../context/AuthContext'
+import { useAuthContext } from '../context/AuthContext'
+import { useChatContext } from '../context/ChatContext'
+import { useNavigate } from 'react-router-dom'
 
 
 function Navbar() {
   const { mode, setMode } = useContext(ThemeContext)
-  const { user } = useAuth() 
+  const { user, setUser } = useAuthContext() 
+  const { setChatId } = useChatContext() 
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    setUser(null)
+    setChatId(null)
+    // TODO: 登出先一律清空
+  }
 
   return (
     <NavContainer>
-      <NavLogo>
+      <NavLogo onClick={() => navigate('/w')}>
         <NavImage src="/talking.png" alt="brand=logo" />
         <NavBrand>ChatBot</NavBrand>
       </NavLogo>
       { user ? <NavUser>Welcome! <span>{user.name}</span></NavUser> : null }
-      <NavModeToggler>
-        { 
-          mode === 'light'
-          ? <HiOutlineSun onClick={() => setMode('dark')} />
-          : <HiOutlineMoon onClick={() => setMode('light')} />
-        }
-      </NavModeToggler>
+      <NavIcons>
+        <NavIcon>
+          { 
+            mode === 'light'
+            ? <HiOutlineSun onClick={() => setMode('dark')} />
+            : <HiOutlineMoon onClick={() => setMode('light')} />
+          }
+        </NavIcon>
+        <NavIcon>
+          <HiOutlineArrowTopRightOnSquare onClick={handleLogout} />
+        </NavIcon>
+      </NavIcons>
     </NavContainer>
   )
 }
@@ -42,6 +57,7 @@ const NavLogo = styled.div `
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
 `
 
 const NavImage = styled.img `
@@ -70,7 +86,12 @@ const NavUser = styled.h2 `
   }
 `
 
-const NavModeToggler = styled.div `
+const NavIcons = styled.div `
+  display: flex;
+  align-items: center;
+`
+
+const NavIcon = styled.div `
   width: 40px;
   height: 40px;
   font-size: 1.5rem;
@@ -80,6 +101,10 @@ const NavModeToggler = styled.div `
   border-radius: 50%;
   background-color: var(--bg-color-main);
   cursor: pointer;
+  
+  :not(:last-child) {
+    margin-right: 0.5rem;
+  }
 `
 
 export default Navbar

@@ -8,12 +8,12 @@ import Login from './pages/Login/Login'
 import SignUp from './pages/SignUp/SignUp'
 import './App.css'
 import ChatContextProvider from './context/ChatContext'
-import { useAuth } from './context/AuthContext'
+import { useAuthContext } from './context/AuthContext'
 import { ToastContainer } from "react-toastify";
 
 
 function App() {
-  const { user } = useAuth() 
+  const { user } = useAuthContext() 
   const [mode, setMode] = useState('light')
 
   return (

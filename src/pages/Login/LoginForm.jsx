@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios'
 import { authAPI } from '../../api'
-import { useAuth } from '../../context/AuthContext'
+import { useAuthContext } from '../../context/AuthContext'
 import { errorToast, warningToast } from '../../utils/toastify'
 
 function LoginForm() {
@@ -15,7 +15,7 @@ function LoginForm() {
     password: ''
   }) 
 
-  const { setUser } = useAuth() 
+  const { setUser } = useAuthContext() 
   const { error, isLoading, sendRequest: postLogin } = useAxios()
 
   const handleSubmit = (e) => {
