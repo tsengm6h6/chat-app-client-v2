@@ -2,11 +2,12 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { HiOutlineSun, HiOutlineMoon } from 'react-icons/hi2'
 import { ThemeContext } from 'styled-components'
+import { useAuth } from '../context/AuthContext'
 
 
 function Navbar() {
   const { mode, setMode } = useContext(ThemeContext)
-  
+  const { user } = useAuth() 
 
   return (
     <NavContainer>
@@ -14,6 +15,7 @@ function Navbar() {
         <NavImage src="/talking.png" alt="brand=logo" />
         <NavBrand>ChatBot</NavBrand>
       </NavLogo>
+      { user ? <NavUser>Welcome! <span>{user.name}</span></NavUser> : null }
       <NavModeToggler>
         { 
           mode === 'light'
@@ -53,6 +55,19 @@ const NavBrand = styled.h1 `
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
+`
+
+const NavUser = styled.h2 `
+  flex: 1;
+  font-size: 1rem;
+  text-align: end;
+  margin-right: 0.5rem;
+  padding: 0 1rem;
+  text-transform: capitalize;
+  
+  span {
+    font-style: italic;
+  }
 `
 
 const NavModeToggler = styled.div `

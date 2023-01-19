@@ -8,10 +8,12 @@ import Login from './pages/Login/Login'
 import SignUp from './pages/SignUp/SignUp'
 import './App.css'
 import ChatContextProvider from './context/ChatContext'
+import { useAuth } from './context/AuthContext'
+import { ToastContainer } from "react-toastify";
 
 
 function App() {
-  const [user, setUser] = useState(null) 
+  const { user } = useAuth() 
   const [mode, setMode] = useState('light')
 
   return (
@@ -19,11 +21,12 @@ function App() {
       <ChatContextProvider>
         <Navbar />
         <Routes>
-            <Route path="/" element={user ? <Home /> : <Navigate to="/login" replace={true} /> } />
+          <Route path="/" element={user ? <Home /> : <Navigate to="/login" replace={true} /> } />
           <Route path="/login" element={user ? <Navigate to="/" replace={true} /> : <Login />} />
           <Route path="/signup" element={user ? <Navigate to="/" replace={true} /> : <SignUp />} />
         </Routes>
         <GlobalStyle />
+        <ToastContainer />
       </ChatContextProvider>
     </ThemeProvider>
   )

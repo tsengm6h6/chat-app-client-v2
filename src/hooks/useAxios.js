@@ -7,9 +7,10 @@ const instance = axios.create({
 
 export const useAxios = () => {
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const sendRequest = useCallback(async(config, cb) => {
+    setIsLoading(true)
     try {
       const result = await instance.request(config)
       if (result?.data) {

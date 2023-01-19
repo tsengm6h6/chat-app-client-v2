@@ -6,6 +6,8 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios'
 import { authAPI } from '../../api'
+import { useAuth } from '../../context/AuthContext'
+import { errorToast, warningToast } from '../../utils/toastify'
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -13,18 +15,26 @@ function LoginForm() {
     password: ''
   }) 
 
+  const { setUser } = useAuth() 
   const { error, isLoading, sendRequest: postLogin } = useAxios()
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (!formData.username || !formData.password) {
+      warningToast('All fields are required!')
+      return
+    }
     postLogin(
       {
         method: 'POST',
         url: authAPI.login,
         data: { ...formData }
       },
-      (data) => console.log(data)
+      (data) => {
+        setUser(data.user)
+      }
     )
+    if (error) errorToast(error.message)
   }
 
   const handleInputChange = (e) => {
@@ -53,7 +63,9 @@ function LoginForm() {
         value={formData.password}
         onChange={handleInputChange}
       />
-      <PrimaryButton>Login</PrimaryButton>
+      <PrimaryButton>
+        { isLoading ? 'loading...' : 'Login' }
+      </PrimaryButton>
       <LoginSpan>
         Do not have an account ? 
         <Link to="/signup">

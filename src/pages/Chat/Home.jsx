@@ -49,7 +49,7 @@ const RoomContainer = styled(ChatContainer) `
   top: 0;
   left: 0;
   overflow: hidden;
-  transform: translateX(100%) scale(0, 1);
+  transform: translateX(100%) scale(1, 1);
   transform-origin: right;
   transition: transform 0.3s ease-in-out;
 
