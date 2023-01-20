@@ -17,12 +17,21 @@ export default function ChatContextProvider({ children }) {
   // 這裡用 message 代替
   const chatMessage = fakeMessage
 
+  const handleChatSelect = (id) => {
+    if (id !== chatId) {
+      setChatId(id)
+     // fetch message
+      console.log('set chat')
+    }
+  }
+
   return (
     <ChatContext.Provider value={{ 
       chatId, 
       setChatId,
       chatRoomInfo,
-      chatMessage
+      chatMessage,
+      handleChatSelect
     }}>
       { children }
     </ChatContext.Provider>

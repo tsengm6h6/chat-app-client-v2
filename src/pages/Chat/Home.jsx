@@ -1,21 +1,41 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Container } from '../../components/MainContainer'
 import ChatRecordList from '../Chat/ChatRecordList'
 import ChatRoom from '../Chat/ChatRoom'
 import { useChatContext } from '../../context/ChatContext'
+import { useAxios } from '../../hooks/useAxios'
+import { chatAPI } from '../../api'
+import { useAuthContext } from '../../context/AuthContext'
 
 function Home() {
+  const { user } = useAuthContext()
   const { chatId } = useChatContext()
+  const [records, setRecords] = useState([])
   console.log(chatId)
+  // TODO: 進到頁面就 fetch contacts
+
+  const { error, isLoading, sendRequest: getChatRecordsList } = useAxios()
+  
+  useEffect(() => {
+    getChatRecordsList(
+      {
+        method: 'GET',
+        url: chatAPI.getChatRecordsList(user._id)
+      },
+      (data) => {
+        setRecords(data.data)
+      }
+    )
+  }, [])
 
   return (
     <Wrapper>
       <ChatContainer>
-        <ChatRecordList />
+        <ChatRecordList records={records} />
       </ChatContainer>
       <RoomContainer className={chatId ? 'show' : null}>
-        <ChatRoom key={chatId} />
+        <ChatRoom key={chatId} records={records} />
       </RoomContainer>
     </Wrapper>
   )

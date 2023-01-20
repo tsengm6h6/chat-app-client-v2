@@ -1,19 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 import Avatar from '../../components/Avatar'
+import { timeFormatter } from '../../utils/timeFormatter'
 
-function ChatListItem({ avatar, name, text, time, unread, handleItemClick }) {
+function ChatListItem(props) {
+  const { avatarImage, name, latestMessage, latestMessageUpdatedAt, unreadCount, latestMessageSender, handleItemClick } = props
   return (
     <ListItem onClick={handleItemClick}>
-        <Avatar src={ avatar } alt="avatar" />
+        <Avatar src={ avatarImage } alt="avatar" />
         <ListContent>
           <TitleBox>
             <ContentTitle>{ name }</ContentTitle>
-            <ContentText>{ text }</ContentText>
+            <ContentText>{ latestMessage }</ContentText>
           </TitleBox>
           <TimeBox>
-            <ContentTime>{ time }</ContentTime>
-            { unread !== 0 && <ContentUnread>{ unread }</ContentUnread>}
+            <ContentTime>{ timeFormatter(latestMessageUpdatedAt) }</ContentTime>
+            { unreadCount !== 0 && <ContentUnread>{ unreadCount }</ContentUnread>}
           </TimeBox>
         </ListContent>
       </ListItem>

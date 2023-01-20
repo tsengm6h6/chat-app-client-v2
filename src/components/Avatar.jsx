@@ -1,9 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-function Avatar(props) {
+function Avatar({ src, ...props}) {
   return (
-    <StyledAvatar {...props} alt="avatar" />
+    <StyledAvatar src={ src ? `data:image/svg+xml;base64,${src}` : '/user.png' } {...props} alt="avatar" />
   )
 }
 
@@ -17,6 +17,7 @@ const StyledAvatar = styled.img `
   background-color: var(--warning);
   border-radius: 50%;
   object-fit: cover;
+  filter: saturate(75%);
 
   ${(props) => {
       switch (props.size) {

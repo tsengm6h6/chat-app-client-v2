@@ -5,14 +5,14 @@ import { fakeRecord } from '../../data/fakeRecord'
 import { useChatContext } from '../../context/ChatContext'
 
 
-function ChatRecordList() {
-  const { setChatId } = useChatContext()
-
-  const renderedRecord = fakeRecord.map(record => {
+function ChatRecordList({ records }) {
+  const { handleChatSelect } = useChatContext()
+  console.log(records)
+  const renderedRecord = records.map(record => {
     return (
       <ListItem 
-        key={record.id}
-        handleItemClick={() => setChatId(record.id)}
+        key={record._id}
+        handleItemClick={(e) => handleChatSelect(record._id)}
         {...record} />
     )
   })
