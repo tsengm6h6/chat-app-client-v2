@@ -10,12 +10,12 @@ import { useNavigate } from 'react-router-dom'
 function Navbar() {
   const { mode, setMode } = useContext(ThemeContext)
   const { user, setUser } = useAuthContext() 
-  const { setChatId } = useChatContext() 
+  const { setChatInfo } = useChatContext() 
   const navigate = useNavigate()
 
   const handleLogout = () => {
     setUser(null)
-    setChatId(null)
+    setChatInfo(null)
     // TODO: 登出先一律清空
   }
 

@@ -12,17 +12,12 @@ export const useChatContext = () => useContext(ChatContext)
 
 export default function ChatContextProvider({ children }) {
   const { user } = useAuthContext()
-  const [ chatId, setChatId ] = useLocalStorage('chat-app-chatId', null)
+  const [ chatInfo, setChatInfo ] = useLocalStorage('chat-app-chatId', null)
   const [ contacts, setContacts ] = useState([])
-  const [ chatMessages, setChatMessages] = useState([])
 
   const { sendRequest: getUserContacts } = useAxios()
-  const { sendRequest: getUserMessages } = useAxios()
 
-  const formatMessages = chatMessages.map(msg => ({
-    ...msg,
-    senderAvatar: contacts.find(({ _id }) => _id === msg.sender)?.avatarImage
-  }))
+  const chatId = chatInfo?._id || null
 
   useEffect(() => {
     if (user) {
@@ -38,36 +33,18 @@ export default function ChatContextProvider({ children }) {
     }
   }, [user])
 
-  const handleChatSelect = async ({ id, chatType }) => {
-    if (id && id !== chatId) {
-      // fetch message
-      await getUserMessages(
-        {
-          method: 'GET',
-          url: chatAPI.getUserMessages(
-            {
-              userId: user._id, 
-              chatId: id, 
-              type: chatType
-            }
-          )
-        },
-        (data) => {
-          setChatMessages(data.data)
-          console.log(data.data)
-        }
-      )
-      console.log('set chat')
-      setChatId(id)
+  const handleChatSelect = async (contact) => {
+    if (contact._id !== chatId) {
+      setChatInfo(contact)
     }
   }
 
   return (
     <ChatContext.Provider value={{ 
       chatId, 
-      setChatId,
+      chatInfo,
+      setChatInfo,
       contacts,
-      formatMessages,
       handleChatSelect
     }}>
       { children }

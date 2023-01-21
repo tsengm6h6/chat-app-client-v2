@@ -7,14 +7,14 @@ import { useChatContext } from '../../context/ChatContext'
 
 function ChatContactList() {
   const { contacts, handleChatSelect } = useChatContext()
-  console.log(contacts)
-  const renderedContacts = contacts.map(({ _id, avatarImage, ...record }) => {
+  const renderedContacts = contacts.map(contact => {
+    const { _id, avatarImage, ...otherContact } = contact
     return (
       <ListItem 
         key={_id}
-        avatarImage={avatarImage ? `data:image/svg+xml;base64,${avatarImage}` : '/user.png'}
-        handleItemClick={(e) => handleChatSelect({ id: _id, chatType: record.chatType })}
-        {...record} />
+        avatarImage={avatarImage ? `data:image/svg+xml;base64, ${avatarImage}` : '/user.png'}
+        handleItemClick={(e) => handleChatSelect(contact)}
+        {...otherContact} />
     )
   })
 

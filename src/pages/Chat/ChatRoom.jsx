@@ -5,13 +5,26 @@ import ChatMessage from '../Chat/ChatMessage'
 import { IoArrowUndo, IoSend } from "react-icons/io5";
 import Avatar, { MultiAvatar } from '../../components/Avatar';
 import { useChatContext } from '../../context/ChatContext'
+import { useAuthContext } from '../../context/AuthContext'
+import { chatAPI } from '../../api'
+import { useAxios } from '../../hooks/useAxios'
 
 function ChatRoom() {
-  const { chatId, setChatId, formatMessages, contacts } = useChatContext()
-  const [ realTimeMessage, setRealTimeMessages ] = useState(formatMessages)
+  const { user } = useAuthContext()
+  const { chatId, chatInfo, setChatInfo, contacts } = useChatContext()
+
+  const [ chatMessages, setChatMessages] = useState([])
+  const [ realTimeMessage, setRealTimeMessages ] = useState([])
   const [ inputMessage, setInputMessage ] = useState('')
 
-  const chatRoomInfo = chatId ? contacts.find(contact => contact._id === chatId) : null
+  const { sendRequest: getUserMessages } = useAxios()
+
+  const formatMessages = (messages) => {
+    return messages.map(msg => ({
+      ...msg,
+      senderAvatar: contacts.find(({ _id }) => _id === msg.sender)?.avatarImage
+    }))
+  }
 
   const msgRef = useRef(null)
 
@@ -19,10 +32,29 @@ function ChatRoom() {
     if (msgRef.current) {
       msgRef.current.scrollIntoView()
     }
-  }, [realTimeMessage])
+  }, [chatMessages])
 
-  const renderedMessage = realTimeMessage.map(msg => {
-    console.log('msg', msg)
+  useEffect(() => {
+    if (chatId) {
+      getUserMessages(
+        {
+          method: 'GET',
+          url: chatAPI.getUserMessages(
+            {
+              userId: user._id, 
+              chatId: chatId, 
+              type: chatInfo.chatType
+            }
+          )
+        },
+        (data) => {
+          setChatMessages(formatMessages(data.data))
+        }
+      )
+    }
+  }, [])
+
+  const renderedMessage = chatMessages.map(msg => {
     return (
       <ChatMessage key={msg._id} {...msg} ref={msgRef} />
     )
@@ -30,18 +62,18 @@ function ChatRoom() {
 
   const renderedAvatar = (
     <HeaderMembers>
-        <Avatar size="small" src={chatRoomInfo?.avatarImage ? `data:image/svg+xml;base64,${chatRoomInfo.avatarImage}` : '/user.png'} />
+        <Avatar size="small" src={chatInfo?.avatarImage ? `data:image/svg+xml;base64,${chatInfo.avatarImage}` : '/user.png'} />
     </HeaderMembers>
   )
 
-  const renderHeader = chatRoomInfo === null ? null : (
+  const renderHeader = chatInfo === null ? null : (
     <RoomHeader>
-      <HeaderIcon onClick={() => setChatId(null)}>
+      <HeaderIcon onClick={() => setChatInfo(null)}>
         <IconWrapper>
           <IoArrowUndo />
         </IconWrapper>
       </HeaderIcon>
-      <HeaderName>{chatRoomInfo?.name}</HeaderName>
+      <HeaderName>{chatInfo?.name}</HeaderName>
       { renderedAvatar }
     </RoomHeader>
   ) 
