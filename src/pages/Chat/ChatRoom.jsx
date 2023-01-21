@@ -6,10 +6,12 @@ import { IoArrowUndo, IoSend } from "react-icons/io5";
 import Avatar, { MultiAvatar } from '../../components/Avatar';
 import { useChatContext } from '../../context/ChatContext'
 
-function ChatRoom({ records, chatRoomInfo }) {
-  const { chatId, setChatId, chatMessage } = useChatContext()
-  const [ realTimeMessage, setRealTimeMessages ] = useState(chatMessage)
+function ChatRoom() {
+  const { chatId, setChatId, formatMessages, contacts } = useChatContext()
+  const [ realTimeMessage, setRealTimeMessages ] = useState(formatMessages)
   const [ inputMessage, setInputMessage ] = useState('')
+
+  const chatRoomInfo = chatId ? contacts.find(contact => contact._id === chatId) : null
 
   const msgRef = useRef(null)
 
@@ -20,8 +22,9 @@ function ChatRoom({ records, chatRoomInfo }) {
   }, [realTimeMessage])
 
   const renderedMessage = realTimeMessage.map(msg => {
+    console.log('msg', msg)
     return (
-      <ChatMessage key={msg.id} {...msg} ref={msgRef} />
+      <ChatMessage key={msg._id} {...msg} ref={msgRef} />
     )
   })
 
@@ -38,7 +41,7 @@ function ChatRoom({ records, chatRoomInfo }) {
           <IoArrowUndo />
         </IconWrapper>
       </HeaderIcon>
-      <HeaderName>{chatRoomInfo.name}</HeaderName>
+      <HeaderName>{chatRoomInfo?.name}</HeaderName>
       { renderedAvatar }
     </RoomHeader>
   ) 

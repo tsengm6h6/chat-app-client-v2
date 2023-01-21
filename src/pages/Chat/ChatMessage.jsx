@@ -1,9 +1,12 @@
 import React, { forwardRef, useRef, useImperativeHandle } from 'react'
 import styled from 'styled-components'
 import Avatar from '../../components/Avatar'
+import { useAuthContext } from '../../context/AuthContext'
+import { timeFormatter } from '../../utils/timeFormatter'
 
 const ChatMessage = forwardRef(
-  function ChatMessage({ avatar, id, name, text, time, unread }, ref) {
+  function ChatMessage({ sender, senderAvatar, _id, message, updatedAt, readers }, ref) {
+    const { user } = useAuthContext()
     const messageRef = useRef(null)
 
     useImperativeHandle(ref, () => {
@@ -16,16 +19,15 @@ const ChatMessage = forwardRef(
       }
     }, [])
 
-    const userId = [3, 5, 6]
-    const fromSelf = userId.includes(id)
+    const fromSelf = user._id === sender
   
     return (
       <Message className={fromSelf ? 'self' : null } ref={messageRef}>
-        <Avatar size="medium" src={avatar} />
-        <Text className={fromSelf ? 'self' : null }>{text}</Text>
+        <Avatar size="medium" src={ `data:image/svg+xml;base64,${ fromSelf ? user.avatarImage : senderAvatar}`} />
+        <Text className={fromSelf ? 'self' : null }>{message}</Text>
         <MessageDetail>
-          <Status>read</Status>
-          <Time>{time}</Time>
+          { readers.length > 0 && <Status>Read</Status> }
+          <Time>{ timeFormatter(updatedAt) }</Time>
         </MessageDetail>
       </Message>
     )

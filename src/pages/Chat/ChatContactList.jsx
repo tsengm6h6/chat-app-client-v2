@@ -5,22 +5,22 @@ import { fakeRecord } from '../../data/fakeRecord'
 import { useChatContext } from '../../context/ChatContext'
 
 
-function ChatRecordList({ records }) {
-  const { handleChatSelect } = useChatContext()
-  console.log(records)
-  const renderedRecord = records.map(({ _id, avatarImage, ...record }) => {
+function ChatContactList() {
+  const { contacts, handleChatSelect } = useChatContext()
+  console.log(contacts)
+  const renderedContacts = contacts.map(({ _id, avatarImage, ...record }) => {
     return (
       <ListItem 
         key={_id}
         avatarImage={avatarImage ? `data:image/svg+xml;base64,${avatarImage}` : '/user.png'}
-        handleItemClick={(e) => handleChatSelect(_id)}
+        handleItemClick={(e) => handleChatSelect({ id: _id, chatType: record.chatType })}
         {...record} />
     )
   })
 
   return (
     <List>
-      {renderedRecord}
+      {renderedContacts}
     </List>
   )
 }
@@ -33,4 +33,4 @@ const List = styled.ul `
   align-items: center;
 `
 
-export default ChatRecordList
+export default ChatContactList
