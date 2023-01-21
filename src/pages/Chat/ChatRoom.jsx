@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { fakeMessage } from '../../data/fakeMessage'
 import ChatMessage from '../Chat/ChatMessage'
 import { IoArrowUndo, IoSend } from "react-icons/io5";
-import { MultiAvatar } from '../../components/Avatar';
+import Avatar, { MultiAvatar } from '../../components/Avatar';
 import { useChatContext } from '../../context/ChatContext'
 
-function ChatRoom() {
-  const { chatId, setChatId, chatRoomInfo, chatMessage } = useChatContext()
+function ChatRoom({ records, chatRoomInfo }) {
+  const { chatId, setChatId, chatMessage } = useChatContext()
   const [ realTimeMessage, setRealTimeMessages ] = useState(chatMessage)
   const [ inputMessage, setInputMessage ] = useState('')
 
@@ -25,6 +25,12 @@ function ChatRoom() {
     )
   })
 
+  const renderedAvatar = (
+    <HeaderMembers>
+        <Avatar size="small" src={chatRoomInfo?.avatarImage ? `data:image/svg+xml;base64,${chatRoomInfo.avatarImage}` : '/user.png'} />
+    </HeaderMembers>
+  )
+
   const renderHeader = chatRoomInfo === null ? null : (
     <RoomHeader>
       <HeaderIcon onClick={() => setChatId(null)}>
@@ -33,12 +39,7 @@ function ChatRoom() {
         </IconWrapper>
       </HeaderIcon>
       <HeaderName>{chatRoomInfo.name}</HeaderName>
-      <HeaderMembers>
-        <MultiAvatar size="small" src={chatRoomInfo.avatar} />
-        <MultiAvatar size="small" src="/talking.png" />
-        <MultiAvatar size="small" src="/vite.svg" />
-        <MultiAvatar size="small" src="/vite.svg" />
-      </HeaderMembers>
+      { renderedAvatar }
     </RoomHeader>
   ) 
   

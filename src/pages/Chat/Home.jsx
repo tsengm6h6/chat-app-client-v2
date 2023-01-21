@@ -12,11 +12,10 @@ function Home() {
   const { user } = useAuthContext()
   const { chatId } = useChatContext()
   const [records, setRecords] = useState([])
-  console.log(chatId)
-  // TODO: 進到頁面就 fetch contacts
 
   const { error, isLoading, sendRequest: getChatRecordsList } = useAxios()
-  
+  const chatRoomInfo = chatId ? records.find(record => record._id === chatId) : null
+
   useEffect(() => {
     getChatRecordsList(
       {
@@ -35,7 +34,10 @@ function Home() {
         <ChatRecordList records={records} />
       </ChatContainer>
       <RoomContainer className={chatId ? 'show' : null}>
-        <ChatRoom key={chatId} records={records} />
+        <ChatRoom 
+          key={chatId} 
+          records={records}
+          chatRoomInfo={chatRoomInfo} />
       </RoomContainer>
     </Wrapper>
   )

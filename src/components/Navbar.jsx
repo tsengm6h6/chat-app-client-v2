@@ -21,7 +21,7 @@ function Navbar() {
 
   return (
     <NavContainer>
-      <NavLogo onClick={() => navigate('/w')}>
+      <NavLogo onClick={() => navigate('/')}>
         <NavImage src="/talking.png" alt="brand=logo" />
         <NavBrand>ChatBot</NavBrand>
       </NavLogo>

@@ -1,9 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-function Avatar({ src, ...props}) {
+function Avatar(props) {
   return (
-    <StyledAvatar src={ src ? `data:image/svg+xml;base64,${src}` : '/user.png' } {...props} alt="avatar" />
+    <StyledAvatar {...props} alt="avatar" />
   )
 }
 
