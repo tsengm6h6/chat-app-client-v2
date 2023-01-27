@@ -54,6 +54,7 @@ export default function ChatContextProvider({ children }) {
       chatInfo,
       setChatInfo,
       contacts,
+      setContacts,
       handleChatSelect
     }}>
       { children }

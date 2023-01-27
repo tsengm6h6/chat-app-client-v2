@@ -10,7 +10,7 @@ import { useAxios } from '../../hooks/useAxios'
 
 function ChatRoom() {
   const { user } = useAuthContext()
-  const { chatId, chatInfo, setChatInfo, contacts } = useChatContext()
+  const { chatId, chatInfo, setChatInfo, contacts, setContacts } = useChatContext()
 
   const [ chatMessages, setChatMessages] = useState([])
   const [ inputMessage, setInputMessage ] = useState('')
@@ -47,7 +47,7 @@ function ChatRoom() {
           )
         },
         (data) => {
-          setChatMessages(formatMessages(data.data))
+          setChatMessages(data.data)
         }
       )
     }
@@ -92,7 +92,22 @@ function ChatRoom() {
         }
       },
       (data) => {
-        setChatMessages(formatMessages([...chatMessages, data.data]))
+        setChatMessages([
+          ...chatMessages, 
+          { ...data.data,  avatarImage: user.avatarImage }
+        ])
+        const { message, sender, updatedAt } = data.data
+        const updatedContact = contacts.map(contact => {
+          return contact._id === chatId 
+            ? {
+                ...contact,
+                latestMessage: message,
+                latestMessageSender: sender,
+                latestMessageUpdatedAt: updatedAt
+              } 
+            : contact
+        })
+        setContacts(updatedContact)
       }
     )
     // TODO: socket send message

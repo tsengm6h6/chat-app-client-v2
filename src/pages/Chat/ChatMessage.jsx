@@ -5,7 +5,7 @@ import { useAuthContext } from '../../context/AuthContext'
 import { timeFormatter } from '../../utils/timeFormatter'
 
 const ChatMessage = forwardRef(
-  function ChatMessage({ sender, senderAvatar, _id, message, updatedAt, readers }, ref) {
+  function ChatMessage({ sender, avatarImage, _id, message, updatedAt, readers }, ref) {
     const { user } = useAuthContext()
     const messageRef = useRef(null)
 
@@ -23,7 +23,7 @@ const ChatMessage = forwardRef(
   
     return (
       <Message className={fromSelf ? 'self' : null } ref={messageRef}>
-        <Avatar size="medium" src={ `data:image/svg+xml;base64,${ fromSelf ? user.avatarImage : senderAvatar}`} />
+        <Avatar size="medium" src={ `data:image/svg+xml;base64,${avatarImage}`} />
         <Text className={fromSelf ? 'self' : null }>{message}</Text>
         <MessageDetail>
           { readers.length > 0 && fromSelf && <Status>Read</Status> }
