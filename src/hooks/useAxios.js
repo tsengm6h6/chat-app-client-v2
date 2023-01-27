@@ -18,7 +18,7 @@ export const useAxios = () => {
         cb(result.data)
       }
     } catch (e) {
-      setError(e)
+      setError(e?.response?.data || e)
     } finally {
       setIsLoading(false)
     }

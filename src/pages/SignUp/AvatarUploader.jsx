@@ -6,11 +6,15 @@ function AvatarUploader({ error, isLoading, avatar, onGenerate }) {
   return (
     <Wrapper>
       <AvatarBox>
-        <AvatarImage 
-          error={error}
-          isLoading={isLoading}
-          src={avatar ? `data:image/svg+xml;base64,${avatar}` : '/user.png'} 
-          alt="user-avatar" />
+        {
+          avatar ? (
+            <AvatarImage 
+              error={error}
+              isLoading={isLoading}
+              src={`data:image/svg+xml;base64,${avatar}`} 
+              alt="user-avatar" />
+          ) : null
+        }
       </AvatarBox>
       <GenerateButton onClick={onGenerate}>
         <IconWrapper isLoading={isLoading}>

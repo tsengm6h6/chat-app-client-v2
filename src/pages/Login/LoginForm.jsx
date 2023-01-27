@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Form from '../../components/Form'
 import TextInput from '../../components/TextInput'
 import { PrimaryButton } from '../../components/Button'
@@ -18,6 +18,10 @@ function LoginForm() {
   const { setUser } = useAuthContext() 
   const { error, isLoading, sendRequest: postLogin } = useAxios()
 
+  useEffect(() => {
+    if (error) errorToast(error.message)
+  }, [error])
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!formData.username || !formData.password) {
@@ -31,10 +35,9 @@ function LoginForm() {
         data: { ...formData }
       },
       (data) => {
-        setUser(data.user)
+        setUser(data.data)
       }
     )
-    if (error) errorToast(error.message)
   }
 
   const handleInputChange = (e) => {

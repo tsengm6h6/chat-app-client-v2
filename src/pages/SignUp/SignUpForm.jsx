@@ -6,28 +6,38 @@ import { PrimaryButton } from '../../components/Button'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios'
-import { Buffer } from 'buffer'
-import { warningToast } from '../../utils/toastify'
+import { errorToast, warningToast } from '../../utils/toastify'
+import { authAPI } from '../../api'
+import { useAuthContext } from '../../context/AuthContext'
+import { avatarGenerator } from '../../utils/avatarGenerator'
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
     username: '',
-    useremail: '',
+    email: '',
     password: '',
     confirmPassword: '',
     avatarImage: ''
   })
+  const { setUser } = useAuthContext() 
 
-  const allowSubmit = () => {
+  const { error: submitError, isLoading: submitLoading, sendRequest: postRegister } = useAxios()
+  const { error: avatarError, isLoading: avatarLoading, sendRequest: fetchRandomAvatar } = useAxios()
+
+  useEffect(() => {
+    if (submitError) errorToast(submitError.message)
+  }, [submitError])
+
+  const submitValidator = () => {
     const {
       username,
-      useremail,
+      email,
       password,
       confirmPassword,
       avatarImage
     } = formData
 
-    const checkArray = [username, useremail, password, confirmPassword, avatarImage]
+    const checkArray = [username, email, password, confirmPassword, avatarImage]
     if (checkArray.some(el => el === '')) {
       warningToast('All fields are required!')
       return false
@@ -41,9 +51,18 @@ function SignUpForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const isValid = allowSubmit()
+    const isValid = submitValidator()
     if (isValid) {
-      console.log('submit', formData)
+      postRegister(
+        {
+          method: 'POST',
+          url: authAPI.register,
+          data: { ...formData }
+        },
+        (data) => {
+          setUser(data.data)
+        }
+      )
     }
   }
 
@@ -54,33 +73,30 @@ function SignUpForm() {
     }))
   }
 
-  const { error, isLoading, sendRequest: fetchRandomAvatar } = useAxios()
-  const genRandomNum = () => Math.floor(Math.random() * 1000)
-  const AVATAR_API = `https://api.multiavatar.com/${genRandomNum()}?apikey=${process.env.VITE_AVATAR_KEY}`
-  const generateAvatar = () => {
-    fetchRandomAvatar(
-      {
-        method: 'GET',
-        url: AVATAR_API
-      },
-      (data) => {
-        const result = Buffer.from(data)
+  const handleGenerate = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    avatarGenerator(
+      fetchRandomAvatar,
+      (avatar) => {
         setFormData(prev => ({
           ...prev,
-          avatarImage: result.toString('base64')
+          avatarImage: avatar
         }))
       }
     )
   }
 
-  const handleGenerate = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    generateAvatar()
-  }
-
   useEffect(() => {
-    generateAvatar()
+    avatarGenerator(
+      fetchRandomAvatar,
+      (avatar) => {
+        setFormData(prev => ({
+          ...prev,
+          avatarImage: avatar
+        }))
+      }
+    )
   }, [])
 
   return (
@@ -97,9 +113,9 @@ function SignUpForm() {
       <TextInput 
         type="email" 
         placeholder="User Email"
-        name="useremail"
-        id="useremail"
-        value={formData.useremail}
+        name="email"
+        id="email"
+        value={formData.email}
         onChange={handleInputChange}
       />
       <TextInput 
@@ -119,12 +135,12 @@ function SignUpForm() {
         onChange={handleInputChange}
       />
       <AvatarUploader 
-        error={error}
-        isLoading={isLoading}
+        error={avatarError}
+        isLoading={avatarLoading}
         avatar={formData.avatarImage} 
         onGenerate={handleGenerate} 
       />
-      <PrimaryButton disabled={isLoading}>Sign Up</PrimaryButton>
+      <PrimaryButton disabled={avatarLoading}>{submitLoading ? 'Submitting...' : 'Sign Up'}</PrimaryButton>
       <LoginSpan>
         Already have an account ? 
         <Link to="/login">
