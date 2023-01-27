@@ -42,10 +42,7 @@ export default function ChatContextProvider({ children }) {
             userId: user._id, 
             chatId: contact._id, 
             type: contact.chatType
-          }),
-        },
-        (data) => {
-          console.log('-- updateReadStatus --', data)
+          })
         }
       )
     }

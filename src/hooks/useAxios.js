@@ -14,7 +14,7 @@ export const useAxios = () => {
     setIsLoading(true)
     try {
       const result = await instance.request(config)
-      if (result?.data) {
+      if (result?.data && cb) {
         cb(result.data)
       }
     } catch (e) {

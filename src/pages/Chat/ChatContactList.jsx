@@ -1,35 +1,77 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import ListItem from './ChatListItem'
 import { useChatContext } from '../../context/ChatContext'
-
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 function ChatContactList() {
   const { contacts, handleChatSelect } = useChatContext()
-  const renderedContacts = contacts.map(contact => {
-    const { _id, avatarImage, ...otherContact } = contact
+  const [ display, setDisplay ] = useState({
+    rooms: true,
+    users: true
+  })
+
+  const contactGroups = contacts.reduce((prev, curr) => {
+      curr?.chatType === 'room' ? prev.rooms.push(curr) : prev.users.push(curr)
+      return prev
+    }, {
+      rooms: [],
+      users: []
+    })
+
+  const handleToggleDisplay = (key) => {
+    setDisplay(prev => ({ ...prev, [key]: !display[key] }))
+  }
+
+  const renderedGroups = Object.entries(contactGroups).map(([key, values]) => {
+    const renderedContacts = values.map(contact => {
+      const { _id, avatarImage, ...otherContact } = contact
+      return (
+        <ListItem 
+          key={_id}
+          avatarImage={avatarImage ? `data:image/svg+xml;base64, ${avatarImage}` : '/user.png'}
+          handleItemClick={(e) => handleChatSelect(contact)}
+          {...otherContact} />
+      )
+    })
+
     return (
-      <ListItem 
-        key={_id}
-        avatarImage={avatarImage ? `data:image/svg+xml;base64, ${avatarImage}` : '/user.png'}
-        handleItemClick={(e) => handleChatSelect(contact)}
-        {...otherContact} />
+      <ListGroup key={key}>
+        <GroupTitle onClick={() => handleToggleDisplay(key)} >
+          { key }
+          { display[key] ? <BiChevronDown /> : <BiChevronUp />}
+        </GroupTitle>
+        { display[key] ?  renderedContacts : null }
+      </ListGroup>
     )
   })
 
   return (
     <List>
-      {renderedContacts}
+      {renderedGroups}
     </List>
   )
 }
 
-const List = styled.ul `
+const List = styled.div `
+  width: 100%;
+`
+
+const ListGroup = styled.ul `
   width: 100%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+`
+
+const GroupTitle = styled.h3 `
+  font-size: 1rem;
+  color: var(--main-color);
+  align-self: flex-start;
+  margin-bottom: 4px;
+  text-transform: capitalize;
+  cursor: pointer;
 `
 
 export default ChatContactList
