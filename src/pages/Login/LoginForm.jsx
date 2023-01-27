@@ -64,7 +64,7 @@ function LoginForm() {
         onChange={handleInputChange}
       />
       <PrimaryButton>
-        { isLoading ? 'loading...' : 'Login' }
+        { isLoading ? 'Loading...' : 'Login' }
       </PrimaryButton>
       <LoginSpan>
         Do not have an account ? 

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import { fakeMessage } from '../../data/fakeMessage'
 import ChatMessage from '../Chat/ChatMessage'
 import { IoArrowUndo, IoSend } from "react-icons/io5";
 import Avatar, { MultiAvatar } from '../../components/Avatar';
@@ -14,7 +13,6 @@ function ChatRoom() {
   const { chatId, chatInfo, setChatInfo, contacts } = useChatContext()
 
   const [ chatMessages, setChatMessages] = useState([])
-  const [ realTimeMessage, setRealTimeMessages ] = useState([])
   const [ inputMessage, setInputMessage ] = useState('')
 
   const { sendRequest: getUserMessages } = useAxios()

@@ -1,6 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { fakeRecord } from '../data/fakeRecord'
-import { fakeMessage } from '../data/fakeMessage'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useAxios } from '../hooks/useAxios'
 import { chatAPI } from '../api'

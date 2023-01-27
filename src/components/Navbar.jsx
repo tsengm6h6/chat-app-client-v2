@@ -34,9 +34,13 @@ function Navbar() {
             : <HiOutlineMoon onClick={() => setMode('light')} />
           }
         </NavIcon>
-        <NavIcon>
-          <HiOutlineArrowTopRightOnSquare onClick={handleLogout} />
-        </NavIcon>
+        {
+          user ? (
+            <NavIcon>
+              <HiOutlineArrowTopRightOnSquare onClick={handleLogout} />
+            </NavIcon>
+          ) : null
+        }
       </NavIcons>
     </NavContainer>
   )

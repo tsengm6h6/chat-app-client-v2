@@ -12,7 +12,8 @@ const StyledButton = styled.button `
   background-color: var(--bg-color-main);
   color: var(--secondary);
   border: 2px solid var(--secondary);
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  filter: ${props => props.disabled ? 'grayscale(10%) saturate(80%) brightness(1.3)' : null };
 `
 
 const StyledPrimaryButton = styled(StyledButton) `
@@ -21,15 +22,15 @@ const StyledPrimaryButton = styled(StyledButton) `
   border-color: transparent;
 `
 
-function Button({ children }) {
+function Button(props) {
   return (
-    <StyledButton>{children}</StyledButton>
+    <StyledButton {...props}>{props.children}</StyledButton>
   )
 }
 
-function PrimaryButton({ children }) {
+function PrimaryButton(props) {
   return (
-    <StyledPrimaryButton>{children}</StyledPrimaryButton>
+    <StyledPrimaryButton {...props}>{props.children}</StyledPrimaryButton>
   )
 }
 

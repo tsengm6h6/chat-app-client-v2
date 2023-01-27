@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import ListItem from './ChatListItem'
-import { fakeRecord } from '../../data/fakeRecord'
 import { useChatContext } from '../../context/ChatContext'
 
 

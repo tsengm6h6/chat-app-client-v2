@@ -10,6 +10,7 @@ export const useAxios = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const sendRequest = useCallback(async(config, cb) => {
+    setError(null)
     setIsLoading(true)
     try {
       const result = await instance.request(config)
