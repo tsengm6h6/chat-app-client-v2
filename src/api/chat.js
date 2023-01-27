@@ -5,4 +5,7 @@ export const chatAPI = {
   getUserMessages: ({ userId, chatId, type }) => {
     return `/api/users/${userId}/messages?chatId=${chatId}&type=${type}`
   },
+  postUserMessage: ({ userId, chatId, type }) => {
+    return `/api/users/${userId}/message?chatId=${chatId}&type=${type}`
+  }
 }

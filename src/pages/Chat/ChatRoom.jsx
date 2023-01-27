@@ -18,6 +18,7 @@ function ChatRoom() {
   const [ inputMessage, setInputMessage ] = useState('')
 
   const { sendRequest: getUserMessages } = useAxios()
+  const { sendRequest: postUserMessage } = useAxios()
 
   const formatMessages = (messages) => {
     return messages.map(msg => ({
@@ -80,24 +81,23 @@ function ChatRoom() {
   
   const handleInputSubmit = (e) => {
     e.preventDefault()
-    console.log(inputMessage)
-    // TODO: 
-    // post message to api
-    // add return message data to realTimeMessage
-    // socket to others
-    setRealTimeMessages(prev => {
-      return [
-        ...prev,
-        {
-          id: Math.random(),
-          avatar: "/vite.svg",
-          name: "Jessic Woo",
-          text: inputMessage,
-          time: "09:00",
-          unread: 0
+    postUserMessage(
+      {
+        method: 'POST',
+        url: chatAPI.postUserMessage({
+          userId: user._id, 
+          chatId: chatId, 
+          type: chatInfo.chatType
+        }),
+        data: {
+          message: inputMessage
         }
-      ]
-    })
+      },
+      (data) => {
+        setChatMessages(formatMessages([...chatMessages, data.data]))
+      }
+    )
+    // TODO: socket send message
     setInputMessage('')
   }
 
