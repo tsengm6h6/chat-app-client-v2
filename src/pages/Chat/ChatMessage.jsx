@@ -26,7 +26,7 @@ const ChatMessage = forwardRef(
         <Avatar size="medium" src={ `data:image/svg+xml;base64,${ fromSelf ? user.avatarImage : senderAvatar}`} />
         <Text className={fromSelf ? 'self' : null }>{message}</Text>
         <MessageDetail>
-          { readers.length > 0 && <Status>Read</Status> }
+          { readers.length > 0 && fromSelf && <Status>Read</Status> }
           <Time>{ timeFormatter(updatedAt) }</Time>
         </MessageDetail>
       </Message>

@@ -10,10 +10,11 @@ export const useChatContext = () => useContext(ChatContext)
 
 export default function ChatContextProvider({ children }) {
   const { user } = useAuthContext()
-  const [ chatInfo, setChatInfo ] = useLocalStorage('chat-app-chatId', null)
+  const [ chatInfo, setChatInfo ] = useLocalStorage('chat-app-chat-info', null)
   const [ contacts, setContacts ] = useState([])
 
   const { sendRequest: getUserContacts } = useAxios()
+  const { sendRequest: updateReadStatus } = useAxios()
 
   const chatId = chatInfo?._id || null
 
@@ -34,6 +35,19 @@ export default function ChatContextProvider({ children }) {
   const handleChatSelect = async (contact) => {
     if (contact._id !== chatId) {
       setChatInfo(contact)
+      updateReadStatus(
+        {
+          method: 'PUT',
+          url: chatAPI.updateReadStatus({
+            userId: user._id, 
+            chatId: contact._id, 
+            type: contact.chatType
+          }),
+        },
+        (data) => {
+          console.log('-- updateReadStatus --', data)
+        }
+      )
     }
   }
 

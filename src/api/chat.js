@@ -7,5 +7,8 @@ export const chatAPI = {
   },
   postUserMessage: ({ userId, chatId, type }) => {
     return `/api/users/${userId}/message?chatId=${chatId}&type=${type}`
-  }
+  },
+  updateReadStatus: ({ userId, chatId, type }) => {
+    return `/api/users/${userId}/messages/status?chatId=${chatId}&type=${type}`
+  },
 }
