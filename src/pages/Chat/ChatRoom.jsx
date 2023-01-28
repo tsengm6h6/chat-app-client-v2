@@ -18,13 +18,6 @@ function ChatRoom() {
   const { sendRequest: getUserMessages } = useAxios()
   const { sendRequest: postUserMessage } = useAxios()
 
-  const formatMessages = (messages) => {
-    return messages.map(msg => ({
-      ...msg,
-      senderAvatar: contacts.find(({ _id }) => _id === msg.sender)?.avatarImage
-    }))
-  }
-
   const msgRef = useRef(null)
 
   useEffect(() => {

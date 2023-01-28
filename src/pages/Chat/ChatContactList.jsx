@@ -55,6 +55,7 @@ function ChatContactList() {
 
 const List = styled.div `
   width: 100%;
+  max-width: 480px;
 `
 
 const ListGroup = styled.ul `
