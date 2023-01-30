@@ -4,12 +4,18 @@ import { Container } from '../../components/MainContainer'
 import ChatContactList from './ChatContactList'
 import ChatRoom from '../Chat/ChatRoom'
 import { useChatContext } from '../../context/ChatContext'
-import { useAxios } from '../../hooks/useAxios'
-import { chatAPI } from '../../api'
 import { useAuthContext } from '../../context/AuthContext'
+import { useSocket } from '../../context/SocketContext'
 
 function Home() {
   const { chatId } = useChatContext()
+  const { user } = useAuthContext()
+  const { socketConnect } = useSocket()
+
+  useEffect(() => {
+    const { disconnect } = socketConnect()
+    return () => disconnect()
+  }, [user])
 
   return (
     <Wrapper>

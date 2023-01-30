@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { HiOutlineSun, HiOutlineMoon, HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2'
 import { ThemeContext } from 'styled-components'
 import { useAuthContext } from '../context/AuthContext'
 import { useChatContext } from '../context/ChatContext'
 import { useNavigate } from 'react-router-dom'
+import { useSocket } from '../context/SocketContext'
 
 
 function Navbar() {
@@ -12,6 +13,16 @@ function Navbar() {
   const { user, setUser } = useAuthContext() 
   const { setChatInfo } = useChatContext() 
   const navigate = useNavigate()
+
+  const { socketId } = useSocket()
+  const [ show, setShow ] = useState(false)
+
+  useEffect(() => {
+    console.log('socket id', socketId)
+    if (socketId) {
+      setShow(true)
+    }
+  }, [socketId])
 
   const handleLogout = () => {
     setUser(null)
@@ -24,6 +35,7 @@ function Navbar() {
       <NavLogo onClick={() => navigate('/')}>
         <NavImage src="/talking.png" alt="brand=logo" />
         <NavBrand>ChatBot</NavBrand>
+        { show && <h1>{socketId}</h1>}
       </NavLogo>
       { user ? <NavUser>Welcome! <span>{user.name}</span></NavUser> : null }
       <NavIcons>
