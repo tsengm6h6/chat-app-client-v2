@@ -4,10 +4,10 @@ import Avatar from '../../components/Avatar'
 import { timeFormatter } from '../../utils/timeFormatter'
 
 function ChatListItem(props) {
-  const { avatarImage, name, latestMessage, latestMessageUpdatedAt, unreadCount, latestMessageSender, handleItemClick } = props
+  const { avatarImage, name, latestMessage, latestMessageUpdatedAt, unreadCount, isOnline, handleItemClick } = props
   return (
     <ListItem onClick={handleItemClick}>
-        <Avatar src={ avatarImage } alt="avatar" />
+        <Avatar onlineStyle={ isOnline ? 'dotted' : null } src={ avatarImage } alt="avatar" />
         <ListContent>
           <TitleBox>
             <ContentTitle>{ name }</ContentTitle>

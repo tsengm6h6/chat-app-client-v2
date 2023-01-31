@@ -18,18 +18,18 @@ function App() {
 
   return (
     <ThemeProvider theme={{ mode, setMode }}>
-      <ChatContextProvider>
-        <SocketContextProvider>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={user ? <Home /> : <Navigate to="/login" replace={true} /> } />
-            <Route path="/login" element={user ? <Navigate to="/" replace={true} /> : <Login />} />
-            <Route path="/signup" element={user ? <Navigate to="/" replace={true} /> : <SignUp />} />
-          </Routes>
-          <GlobalStyle />
-          <ToastContainer />
-        </SocketContextProvider>
-      </ChatContextProvider>
+      <SocketContextProvider>
+        <ChatContextProvider>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={user ? <Home /> : <Navigate to="/login" replace={true} /> } />
+              <Route path="/login" element={user ? <Navigate to="/" replace={true} /> : <Login />} />
+              <Route path="/signup" element={user ? <Navigate to="/" replace={true} /> : <SignUp />} />
+            </Routes>
+            <GlobalStyle />
+            <ToastContainer />
+        </ChatContextProvider>
+      </SocketContextProvider>
     </ThemeProvider>
   )
 }

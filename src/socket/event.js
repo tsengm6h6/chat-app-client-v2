@@ -1,6 +1,5 @@
 export const socketListenEvent = (socket, { setSocketValue }) => {
   socket.on("connect", () => {
-    console.log('connect', socket.id)
     setSocketValue(prev => ({
       ...prev,
       socketId: socket.id
@@ -9,7 +8,6 @@ export const socketListenEvent = (socket, { setSocketValue }) => {
 
   // user online / offline
   socket.on('ONLINE_USER_CHANGED', (onlineUsers) => {
-    console.log('online user changed', onlineUsers)
     setSocketValue(prev => ({
       ...prev,
       onlineUsers

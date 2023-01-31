@@ -10,7 +10,7 @@ function ChatRoomInput({ setChatMessages }) {
   const [ inputMessage, setInputMessage ] = useState('')
 
   const { user } = useAuthContext()
-  const { chatId, chatInfo, contacts, setContacts } = useChatContext()
+  const { chatId, chatInfo, contactsWithOnlineStatus, setContacts } = useChatContext()
   const { sendRequest: postUserMessage } = useAxios()
   
   const handleInputSubmit = (e) => {
@@ -33,7 +33,7 @@ function ChatRoomInput({ setChatMessages }) {
           { ...data.data,  avatarImage: user.avatarImage }
         ])
         const { message, sender, updatedAt } = data.data
-        const updatedContact = contacts.map(contact => {
+        const updatedContact = contactsWithOnlineStatus.map(contact => {
           return contact._id === chatId 
             ? {
                 ...contact,

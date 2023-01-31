@@ -2,22 +2,39 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 function Avatar(props) {
+  const { onlineStyle, size, ...otherProps } = props
+
   return (
-    <StyledAvatar {...props} alt="avatar" />
+    <StyledAvatar onlineStyle={onlineStyle} size={size}>
+      <AvatarImage {...otherProps} />
+    </StyledAvatar>
   )
 }
 
 export function MultiAvatar(props) {
+  const { size, ...otherProps } = props
+
   return (
-    <StyledMultiAvatar {...props} alt="avatar" />
+    <StyledMultiAvatar size={size}>
+      <AvatarImage {...otherProps} />
+    </StyledMultiAvatar>
   )
 }
 
-const StyledAvatar = styled.img `
-  background-color: var(--warning);
-  border-radius: 50%;
-  object-fit: cover;
-  filter: saturate(75%);
+const StyledAvatar = styled.div `
+  position: relative;
+
+  &::after {
+    content: "";
+    width: 0.9rem;
+    height: 0.9rem;
+    background-color: ${props => props.onlineStyle === 'dotted' ? 'var(--warning)' : 'transparent' };
+    filter: contrast(150%) brightness(105%);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 
   ${(props) => {
       switch (props.size) {
@@ -48,6 +65,12 @@ const StyledAvatar = styled.img `
       }
     }
   }
+`
+const AvatarImage = styled.img `
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(75%);
+  border-radius: 50%;
 `
 
 const StyledMultiAvatar = styled(StyledAvatar) `

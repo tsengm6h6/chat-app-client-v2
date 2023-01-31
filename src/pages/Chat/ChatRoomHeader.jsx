@@ -1,11 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useChatContext } from '../../context/ChatContext'
+import { useSocketContext } from '../../context/SocketContext';
 import { IoArrowUndo } from "react-icons/io5";
 import Avatar from '../../components/Avatar';
 
 function ChatRoomHeader() {
   const { chatInfo, setChatInfo } = useChatContext()
+  const { socketValue: { onlineUsers } } = useSocketContext()
+
+  // const chatOnline = chatInfo && onlineUsers?.some(({ userId }) => userId === chatInfo._id)
 
   return (
     chatInfo !== null &&

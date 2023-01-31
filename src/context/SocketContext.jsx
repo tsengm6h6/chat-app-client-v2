@@ -7,7 +7,7 @@ const INIT_SOCKET_STATE = {
 }
 
 const SocketContext = createContext(INIT_SOCKET_STATE)
-export const useSocket = () => useContext(SocketContext)
+export const useSocketContext = () => useContext(SocketContext)
 
 export default function SocketContextProvider({ children }) {
   const [socketValue, setSocketValue] = useState(INIT_SOCKET_STATE)

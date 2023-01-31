@@ -5,7 +5,7 @@ import { ThemeContext } from 'styled-components'
 import { useAuthContext } from '../context/AuthContext'
 import { useChatContext } from '../context/ChatContext'
 import { useNavigate } from 'react-router-dom'
-import { useSocket } from '../context/SocketContext'
+import { useSocketContext } from '../context/SocketContext'
 
 
 function Navbar() {
@@ -14,7 +14,7 @@ function Navbar() {
   const { setChatInfo } = useChatContext() 
   const navigate = useNavigate()
 
-  const { socketValue: { socketId, onlineUsers }, socketEmitEvent } = useSocket()
+  const { socketValue: { socketId, onlineUsers }, socketEmitEvent } = useSocketContext()
   const [ show, setShow ] = useState(false)
 
   useEffect(() => {

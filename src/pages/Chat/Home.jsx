@@ -5,12 +5,12 @@ import ChatContactList from './ChatContactList'
 import ChatRoom from '../Chat/ChatRoom'
 import { useChatContext } from '../../context/ChatContext'
 import { useAuthContext } from '../../context/AuthContext'
-import { useSocket } from '../../context/SocketContext'
+import { useSocketContext } from '../../context/SocketContext'
 
 function Home() {
   const { chatId } = useChatContext()
   const { user } = useAuthContext()
-  const { socketConnect, socketValue: { socketId }, socketEmitEvent } = useSocket()
+  const { socketConnect, socketValue: { socketId }, socketEmitEvent } = useSocketContext()
 
   useEffect(() => {
     const { disconnect } = socketConnect()
