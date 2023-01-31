@@ -14,20 +14,22 @@ function Navbar() {
   const { setChatInfo } = useChatContext() 
   const navigate = useNavigate()
 
-  const { socketId } = useSocket()
+  const { socketValue: { socketId, onlineUsers }, socketEmitEvent } = useSocket()
   const [ show, setShow ] = useState(false)
 
   useEffect(() => {
     console.log('socket id', socketId)
     if (socketId) {
       setShow(true)
+      socketEmitEvent.test()
     }
   }, [socketId])
 
   const handleLogout = () => {
     setUser(null)
+    // TODO: 登出先一律清空(localStorage 不紀錄上一次聊天對象)
     setChatInfo(null)
-    // TODO: 登出先一律清空
+    socketEmitEvent.userOffline(user._id)
   }
 
   return (
@@ -36,6 +38,7 @@ function Navbar() {
         <NavImage src="/talking.png" alt="brand=logo" />
         <NavBrand>ChatBot</NavBrand>
         { show && <h1>{socketId}</h1>}
+        { show && onlineUsers && <p> 訪客人數：{ onlineUsers.length || 0}</p> }
       </NavLogo>
       { user ? <NavUser>Welcome! <span>{user.name}</span></NavUser> : null }
       <NavIcons>

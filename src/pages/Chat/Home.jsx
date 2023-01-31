@@ -10,12 +10,20 @@ import { useSocket } from '../../context/SocketContext'
 function Home() {
   const { chatId } = useChatContext()
   const { user } = useAuthContext()
-  const { socketConnect } = useSocket()
+  const { socketConnect, socketValue: { socketId }, socketEmitEvent } = useSocket()
 
   useEffect(() => {
     const { disconnect } = socketConnect()
-    return () => disconnect()
-  }, [user])
+    return () => {
+      disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    if(socketId) {
+      socketEmitEvent.userOnline(user._id)
+    }
+  }, [socketId])
 
   return (
     <Wrapper>

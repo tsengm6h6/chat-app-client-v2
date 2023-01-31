@@ -1,18 +1,21 @@
 import { io } from "socket.io-client";
+import { socketListenEvent } from './event'
+import { socketEmitEvent } from "./emit";
 
-export const initSocket = ({ setSocketId }) => {
+export const initSocket = ({ setSocketValue, setSocketEmitEvents, INIT_SOCKET_STATE }) => {
   const socket = io(process.env.VITE_SERVER_URL);
 
-  socket.on("connect", () => {
-    console.log('connect', socket.id)
-    setSocketId(socket.id)
-  });
+  socketListenEvent(socket, { setSocketValue })
+
+  const allowedEvents = socketEmitEvent(socket)
+  setSocketEmitEvents(allowedEvents)
 
   return {
+    socket,
     disconnect: () => {
-      console.log('DIS')
+      console.log('DISCONNECT')
+      setSocketValue(INIT_SOCKET_STATE)
       socket.disconnect()
-      setSocketId(null)
     }
   }
 }

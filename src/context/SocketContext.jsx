@@ -1,19 +1,24 @@
 import React, { createContext, useContext, useState } from 'react'
 import { initSocket } from '../socket'
 
+const INIT_SOCKET_STATE = {
+  socketId: null,
+  onlineUsers: null
+}
 
-const SocketContext = createContext({})
+const SocketContext = createContext(INIT_SOCKET_STATE)
 export const useSocket = () => useContext(SocketContext)
 
 export default function SocketContextProvider({ children }) {
-  const [socketId, setSocketId] = useState(null)
+  const [socketValue, setSocketValue] = useState(INIT_SOCKET_STATE)
+  const [socketEmitEvent, setSocketEmitEvents] = useState({})
 
   const socketConnect = () => {
-    return initSocket({ setSocketId })
+    return initSocket({ setSocketValue, setSocketEmitEvents, INIT_SOCKET_STATE })
   }
 
   return (
-    <SocketContext.Provider value={{ socketConnect, socketId }}>
+    <SocketContext.Provider value={{ socketConnect, socketValue, socketEmitEvent }}>
       { children }
     </SocketContext.Provider>
   )
