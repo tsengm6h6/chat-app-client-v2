@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useChatContext } from '../../context/ChatContext'
 import ChatMessage from '../Chat/ChatMessage'
 
-function ChatRoomMessage({ chatMessages }) {
+function ChatRoomMessage({ chatMessages, messageLoading }) {
   const { chatId } = useChatContext()
 
   const msgRef = useRef(null)
@@ -23,11 +23,11 @@ function ChatRoomMessage({ chatMessages }) {
   return (
     <RoomMessage>
       { chatId 
-        ? renderedMessage 
+        ? messageLoading ? <RoomEmptyMessage>Loading...</RoomEmptyMessage> : renderedMessage
         : (
-          <RoomWelcomMessage>
+          <RoomWelcomeMessage>
             Select a user to start a chat
-          </RoomWelcomMessage>
+          </RoomWelcomeMessage>
         )
       }
     </RoomMessage>
@@ -37,10 +37,10 @@ function ChatRoomMessage({ chatMessages }) {
 const RoomMessage = styled.div `
   flex: 1;
   overflow: auto;
-  padding: 1.5rem 1.5rem 0.5rem;
+  padding: 1.5rem 1.5rem 0;
 `
 
-const RoomWelcomMessage = styled.div `
+const RoomEmptyMessage = styled.div `
   width: 100%;
   height: 100%;
   display: flex;
@@ -48,8 +48,12 @@ const RoomWelcomMessage = styled.div `
   justify-content: center;
   background-color: var(--bg-color-main);
   color: var(--primary);
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
+`
+
+const RoomWelcomeMessage = styled(RoomEmptyMessage) `
+  font-size: 1.5rem;
 `
 
 export default ChatRoomMessage

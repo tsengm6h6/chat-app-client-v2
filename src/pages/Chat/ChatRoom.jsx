@@ -12,8 +12,7 @@ import { useAxios } from '../../hooks/useAxios'
 function ChatRoom() {
   const { user } = useAuthContext()
   const { chatId, chatInfo, updateMessageStatusToRead } = useChatContext()
-  const { sendRequest: getUserMessages } = useAxios()
-  const { sendRequest: updateReadStatus } = useAxios()
+  const { isLoading: messageLoading, sendRequest: getUserMessages } = useAxios()
   const { socketValue: { messageData, messageReadStatus }, socketEmitEvent, setSocketValue } = useSocketContext()
   
   const [ chatMessages, setChatMessages] = useState([])
@@ -81,7 +80,7 @@ function ChatRoom() {
   return (
     <RoomWrapper>
       <ChatRoomHeader />
-      <ChatRoomMessage chatMessages={chatMessages} />
+      <ChatRoomMessage chatMessages={chatMessages} messageLoading={messageLoading} />
       <ChatRoomInput setChatMessages={setChatMessages} />
     </RoomWrapper>
   )
