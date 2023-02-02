@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { IoSend } from "react-icons/io5";
 import { chatAPI } from '../../api'
@@ -10,14 +10,19 @@ import { useAxios } from '../../hooks/useAxios'
 function ChatRoomInput({ setChatMessages }) {
   const [ inputMessage, setInputMessage ] = useState('')
   const [ isTyping, setIsTyping ] = useState(false)
+  const [ showNotify, setShowNotify] = useState(false)
 
   const { user } = useAuthContext()
   const { chatId, chatInfo, updateContactLatestMessage } = useChatContext()
-  const { socketEmitEvent } = useSocketContext()
+  const { socketValue: { typingNotify }, socketEmitEvent, setSocketValue } = useSocketContext()
   const { sendRequest: postUserMessage } = useAxios()
   
   const handleInputSubmit = (e) => {
     e.preventDefault()
+    if (inputMessage.trim() === '') {
+      setInputMessage('')
+      return
+    }
     postUserMessage(
       {
         method: 'POST',
@@ -27,7 +32,7 @@ function ChatRoomInput({ setChatMessages }) {
           type: chatInfo.chatType
         }),
         data: {
-          message: inputMessage
+          message: inputMessage.trim()
         }
       },
       (data) => {
@@ -52,21 +57,44 @@ function ChatRoomInput({ setChatMessages }) {
           updateId: chatId,
           unreadCount: 0
         })
+
+        setInputMessage('')
       }
     )
-    setInputMessage('')
   }
 
   const handleKeyUp = () => {
-    setIsTyping(inputMessage.trim() !== '')
+    // 如果 typing 不一樣才 emit
+    const newTypingStatus = inputMessage.trim() !== ''
+    if (isTyping !== newTypingStatus) {
+      socketEmitEvent.userTyping({
+        chatType: chatInfo.chatType,
+        senderId: user._id,
+        receiverId: chatId,
+        typing: newTypingStatus,
+        message: `${user.name} is typing...`
+      })
+    }
+    setIsTyping(newTypingStatus)
   }
+
+  useEffect(() => {
+    if (typingNotify) {
+      const { chatType, senderId, receiverId, typing } = typingNotify
+      const isChatting = chatType === 'user' ? chatId === senderId : chatId === receiverId
+      setShowNotify(typing && isChatting) // 只有聊天中 typing 才顯示
+    } else {
+      setShowNotify(false)
+    }
+  }, [typingNotify]) 
+
   return (
     <>
       {
-        isTyping &&
+        showNotify &&
           <TypeBox>
             <TypeWriter>
-              <TypeContent>someone is typing...</TypeContent>
+              <TypeContent>{typingNotify.message}</TypeContent>
             </TypeWriter>
           </TypeBox>
       }
@@ -121,7 +149,6 @@ const TypeBox = styled.div `
 `
 
 const TypeWriter = styled.div `
-  margin-bottom: 4px;
   margin: 0 1rem;
 `
 

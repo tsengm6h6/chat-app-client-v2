@@ -16,7 +16,10 @@ export const socketEmitEvent = (socket) => {
       console.log('socket 告知對方「自己」已讀', updatedData)
       socket.emit('UPDATE_MESSAGE_STATUS', updatedData)
     },
-    userTyping: () => {},
+    userTyping: (typingNotify) => {
+      console.log('=== user typing ===', typingNotify)
+      socket.emit('USER_TYPING', typingNotify)
+    },
     enterChatRoom: () => {},
     leaveChatRoom: () => {},
     roomCreated: () => {},

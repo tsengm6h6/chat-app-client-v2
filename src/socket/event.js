@@ -32,7 +32,13 @@ export const socketListenEvent = (socket, { setSocketValue }) => {
   })
 
   // someone is typing
-  socket.on('TYPING_NOTIFY', () => {})
+  socket.on('TYPING_NOTIFY', (typingNotify) => {
+    console.log('=== socket get typing notify ===', typingNotify)
+    setSocketValue(prev => ({
+      ...prev,
+      typingNotify
+    }))
+  })
 
   // someone enter / leave chat room
   socket.on('CHAT_ROOM_NOTIFY', () => {})
