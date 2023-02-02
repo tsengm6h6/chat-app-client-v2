@@ -15,7 +15,7 @@ function Home() {
   useEffect(() => {
     const { disconnect } = socketConnect()
     return () => {
-      disconnect()
+      disconnect() // TODO: 移到 APP 連線，避免 cleanup 就斷線
     }
   }, [])
 

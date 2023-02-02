@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Chat/Home'
 import Login from './pages/Login/Login'
 import SignUp from './pages/SignUp/SignUp'
+import Room from './pages/Room/Room'
 import './App.css'
 import ChatContextProvider from './context/ChatContext'
 import SocketContextProvider from './context/SocketContext'
@@ -23,6 +24,7 @@ function App() {
             <Navbar />
             <Routes>
               <Route path="/" element={user ? <Home /> : <Navigate to="/login" replace={true} /> } />
+              <Route path="/open-room" element={user ? <Room /> : <Navigate to="/login" replace={true} /> } />
               <Route path="/login" element={user ? <Navigate to="/" replace={true} /> : <Login />} />
               <Route path="/signup" element={user ? <Navigate to="/" replace={true} /> : <SignUp />} />
             </Routes>
