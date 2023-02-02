@@ -3,7 +3,9 @@ import { initSocket } from '../socket'
 
 const INIT_SOCKET_STATE = {
   socketId: null,
-  onlineUsers: null
+  onlineUsers: null,
+  messageData: null,
+  messageReadStatus: null
 }
 
 const SocketContext = createContext(INIT_SOCKET_STATE)
@@ -18,7 +20,7 @@ export default function SocketContextProvider({ children }) {
   }
 
   return (
-    <SocketContext.Provider value={{ socketConnect, socketValue, socketEmitEvent }}>
+    <SocketContext.Provider value={{ socketConnect, socketValue, setSocketValue,  socketEmitEvent }}>
       { children }
     </SocketContext.Provider>
   )

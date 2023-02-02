@@ -1,15 +1,21 @@
 export const socketEmitEvent = (socket) => {
   return {
     userOnline: (userId) => {
-      console.log('user online', userId)
       socket.emit('USER_ONLINE', userId)
     },
     userOffline: (userId) => {
-      console.log('user offline', userId)
       socket.emit('USER_OFFLINE', userId)
     },
-    sendMessage: () => {},
-    updateMessageStatue: () => {},
+    sendMessage: (messageData) => {
+      // type, message, senderId, receiverId
+      console.log('=== socket 送出訊息 ===')
+      console.log('send message emit', messageData)
+      socket.emit('SEND_MESSAGE', messageData)
+    },
+    updateMessageStatus: (updatedData) => {
+      console.log('socket 告知對方「自己」已讀', updatedData)
+      socket.emit('UPDATE_MESSAGE_STATUS', updatedData)
+    },
     userTyping: () => {},
     enterChatRoom: () => {},
     leaveChatRoom: () => {},

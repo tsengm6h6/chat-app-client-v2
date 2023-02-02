@@ -29,6 +29,7 @@ function ChatContactList() {
       return (
         <ListItem 
           key={_id}
+          contactId={_id}
           avatarImage={avatarImage ? `data:image/svg+xml;base64, ${avatarImage}` : '/user.png'}
           handleItemClick={(e) => handleChatSelect(contact)}
           {...otherContact} />

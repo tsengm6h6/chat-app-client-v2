@@ -6,7 +6,6 @@ export const socketListenEvent = (socket, { setSocketValue }) => {
     }))
   });
 
-  // user online / offline
   socket.on('ONLINE_USER_CHANGED', (onlineUsers) => {
     setSocketValue(prev => ({
       ...prev,
@@ -15,10 +14,22 @@ export const socketListenEvent = (socket, { setSocketValue }) => {
   })
 
   // receive message
-  socket.on('RECEIVE_MESSAGE', () => {})
+  socket.on('RECEIVE_MESSAGE', (messageData) => {
+    console.log('receive message', messageData)
+    setSocketValue(prev => ({
+      ...prev,
+      messageData
+    }))
+  })
 
   // message has been read
-  socket.on('MESSAGE_READ', () => {})
+  socket.on('MESSAGE_READ', (messageReadStatus) => {
+    console.log('=== socket 收到「對方」已讀通知 ===', messageReadStatus)
+    setSocketValue(prev => ({
+      ...prev,
+      messageReadStatus
+    }))
+  })
 
   // someone is typing
   socket.on('TYPING_NOTIFY', () => {})

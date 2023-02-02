@@ -5,6 +5,7 @@ import { timeFormatter } from '../../utils/timeFormatter'
 
 function ChatListItem(props) {
   const { avatarImage, name, latestMessage, latestMessageUpdatedAt, unreadCount, isOnline, handleItemClick } = props
+
   return (
     <ListItem onClick={handleItemClick}>
         <Avatar onlineStyle={ isOnline ? 'dotted' : null } src={ avatarImage } alt="avatar" />

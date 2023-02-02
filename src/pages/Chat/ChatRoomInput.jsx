@@ -4,13 +4,15 @@ import { IoSend } from "react-icons/io5";
 import { chatAPI } from '../../api'
 import { useChatContext } from '../../context/ChatContext'
 import { useAuthContext } from '../../context/AuthContext'
+import { useSocketContext } from '../../context/SocketContext';
 import { useAxios } from '../../hooks/useAxios'
 
 function ChatRoomInput({ setChatMessages }) {
   const [ inputMessage, setInputMessage ] = useState('')
 
   const { user } = useAuthContext()
-  const { chatId, chatInfo, contactsWithOnlineStatus, setContacts } = useChatContext()
+  const { chatId, chatInfo, updateContactLatestMessage } = useChatContext()
+  const { socketEmitEvent } = useSocketContext()
   const { sendRequest: postUserMessage } = useAxios()
   
   const handleInputSubmit = (e) => {
@@ -28,25 +30,29 @@ function ChatRoomInput({ setChatMessages }) {
         }
       },
       (data) => {
+        // 更新自己的 room message
         setChatMessages(prev => [
           ...prev, 
           { ...data.data,  avatarImage: user.avatarImage }
         ])
-        const { message, sender, updatedAt } = data.data
-        const updatedContact = contactsWithOnlineStatus.map(contact => {
-          return contact._id === chatId 
-            ? {
-                ...contact,
-                latestMessage: message,
-                latestMessageSender: sender,
-                latestMessageUpdatedAt: updatedAt
-              } 
-            : contact
+
+        // 用 socket 即時通知對方
+        socketEmitEvent.sendMessage({
+          ...data.data,
+          avatarImage: user.avatarImage,
+          type: chatInfo.chatType, 
+          receiver: chatId,
         })
-        setContacts(updatedContact)
+        
+        // 更新自己的 contact list
+        updateContactLatestMessage({
+          ...data.data,
+          type: chatInfo.chatType,
+          updateId: chatId,
+          unreadCount: 0
+        })
       }
     )
-    // TODO: socket send message
     setInputMessage('')
   }
 

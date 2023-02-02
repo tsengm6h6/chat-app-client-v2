@@ -11,9 +11,10 @@ export const useChatContext = () => useContext(ChatContext)
 
 export default function ChatContextProvider({ children }) {
   const { user } = useAuthContext()
-  const { socketValue: { onlineUsers } } = useSocketContext()
+  const { socketValue: { onlineUsers, messageData }, socketEmitEvent } = useSocketContext()
   const [ chatInfo, setChatInfo ] = useLocalStorage('chat-app-chat-info', null)
   const [ contacts, setContacts ] = useState([])
+  const [ contactsWithNewMessage, setContactsWithNewMessage ] = useState(contacts)
 
   const { sendRequest: getUserContacts } = useAxios()
   const { sendRequest: updateReadStatus } = useAxios()
@@ -21,9 +22,10 @@ export default function ChatContextProvider({ children }) {
   const chatId = chatInfo?._id || null
   const contactsWithOnlineStatus = contacts.map(contact => ({
     ...contact,
-    isOnline: onlineUsers?.some(user => user.userId === contact._id) || false
+    isOnline: onlineUsers?.some(user => user.userId === contact._id) || false,
   }))
 
+  // fetch user contacts
   useEffect(() => {
     if (user) {
       getUserContacts(
@@ -38,19 +40,59 @@ export default function ChatContextProvider({ children }) {
     }
   }, [user])
 
-  const handleChatSelect = async (contact) => {
-    if (contact._id !== chatId) {
-      setChatInfo(contact)
-      updateReadStatus(
-        {
-          method: 'PUT',
-          url: chatAPI.updateReadStatus({
-            userId: user._id, 
-            chatId: contact._id, 
-            type: contact.chatType
-          })
-        }
-      )
+  // 更新最新訊息
+  const updateContactLatestMessage = (latestMessageData) => {
+    const { updateId, sender, message, updatedAt, unreadCount } = latestMessageData
+    console.log('== updateContactLatestMessage ==', latestMessageData)
+    setContacts(prevContact => prevContact.map(contact => {
+      return contact._id === updateId 
+      ? {
+        ...contact,
+        latestMessage: message, 
+        latestMessageSender: sender, 
+        latestMessageUpdatedAt: updatedAt,
+        unreadCount: chatId === sender ? 0 : unreadCount 
+      } : contact
+    }))
+  }
+
+  // 有新訊息時，更新 contact 最新訊息
+  useEffect(() => {
+    if (messageData) {
+      console.log('== chat context get msg ==', messageData)
+      updateContactLatestMessage({ ...messageData, updateId: messageData.sender })
+    }
+  }, [messageData])
+
+  // 通知對方自己已讀
+  const updateMessageStatusToRead = (chatId, type) => {
+    // API 更新對方發出的訊息為已讀
+    updateReadStatus(
+      {
+        method: 'PUT',
+        url: chatAPI.updateReadStatus({
+          userId: user._id, 
+          chatId, 
+          type
+        })
+      }
+    )
+    // socket 告知對方「自己」已讀
+    socketEmitEvent.updateMessageStatus({ 
+      readerId: user._id,
+      messageSender: chatId,
+      type,
+    })
+  }
+
+
+  const handleChatSelect = async (selected) => {
+    if (selected._id !== chatId) {
+      setChatInfo(selected)
+      updateMessageStatusToRead(selected._id, selected.chatType)
+      setContacts(prevContacts => prevContacts.map(
+        prev => prev._id === selected._id ? { ...prev, unreadCount: 0 } : prev
+      ))
     }
   }
 
@@ -61,7 +103,9 @@ export default function ChatContextProvider({ children }) {
       setChatInfo,
       setContacts,
       handleChatSelect,
-      contactsWithOnlineStatus
+      contactsWithOnlineStatus,
+      updateContactLatestMessage,
+      updateMessageStatusToRead
     }}>
       { children }
     </ChatContext.Provider>
