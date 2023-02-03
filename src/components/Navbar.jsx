@@ -34,7 +34,6 @@ function Navbar() {
     setChatInfo(null)
     if (socketId) {
       socketEmitEvent(socket).userOffline(user._id)
-      // socketEmitEvent.userOffline(user._id)
       console.log('DISCONNECT')
       resetSocketValue()
       socket.disconnect()
@@ -47,8 +46,7 @@ function Navbar() {
         <NavLogo>
           <NavImage src="/talking.png" alt="brand=logo" />
           <NavBrand>ChatBot</NavBrand>
-          { show && <h1>{socketId}</h1>}
-          { show && onlineUsers && <p> 訪客人數：{ onlineUsers.length || 0}</p> }
+          { show && onlineUsers && <NavCount> 上線人數：{ onlineUsers.length || 0}</NavCount> }
         </NavLogo>
       </Link>
       { user ? <NavUser>Welcome! <span>{user.name}</span></NavUser> : null }
@@ -115,6 +113,11 @@ const NavBrand = styled.h1 `
   letter-spacing: 1px;
 `
 
+const NavCount = styled.p `
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+`
+
 const NavUser = styled.h2 `
   flex: 1;
   font-size: 1rem;
@@ -122,9 +125,14 @@ const NavUser = styled.h2 `
   margin-right: 0.5rem;
   padding: 0 1rem;
   text-transform: capitalize;
+  display: none;
   
   span {
     font-style: italic;
+  }
+
+  @media screen and (min-width: 768px) {
+    display: block;
   }
 `
 

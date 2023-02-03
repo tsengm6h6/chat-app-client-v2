@@ -53,6 +53,7 @@ const RoomContainer = styled(ChatContainer) `
   transform: translateX(100%) scale(1, 1);
   transform-origin: right;
   transition: transform 0.3s ease-in-out;
+  background-color: var(--bg-color-main);
 
   &.show {
     transform: translateX(0) scale(1, 1);

@@ -11,4 +11,7 @@ export const chatAPI = {
   updateReadStatus: ({ userId, chatId, type }) => {
     return `/api/users/${userId}/messages/status?chatId=${chatId}&type=${type}`
   },
+  postCreateRoom: (userId) => {
+    return `/api/users/${userId}/room`
+  }
 }

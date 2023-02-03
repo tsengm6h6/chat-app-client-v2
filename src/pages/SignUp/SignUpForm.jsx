@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Form from '../../components/Form'
 import TextInput from '../../components/TextInput'
-import AvatarUploader from './AvatarUploader'
+import AvatarUploader from '../../components/AvatarUploader'
 import { PrimaryButton } from '../../components/Button'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'

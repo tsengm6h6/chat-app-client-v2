@@ -9,6 +9,7 @@ export const GlobalStyle = createGlobalStyle`
               --bg-color-main: #1D1E23ff;
               --bg-color-darken: #16171Bff;
               --shadow-color: #090808;
+              --shadow-color-primary: #acb324;
               --main-color: #FBFBFCff;
               --primary: #F3FB8Aff;
               --secondary: #B785F6ff;
@@ -30,6 +31,7 @@ export const GlobalStyle = createGlobalStyle`
               --bg-color-main: #FFFFFFff;
               --bg-color-darken: #F6F7FBff;
               --shadow-color: #e4e4e4;
+              --shadow-color-primary: #328f76;
               --main-color: #3D3D3Fff;
               --primary: #3AA589ff;
               --secondary: #4E416Cff;
