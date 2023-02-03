@@ -4,6 +4,7 @@ import { useAxios } from '../hooks/useAxios'
 import { chatAPI } from '../api'
 import { useAuthContext } from '../context/AuthContext'
 import { useSocketContext } from '../context/SocketContext'
+import { socketEmitEvent } from '../socket/emit'
 
 export const ChatContext = createContext({})
 
@@ -11,7 +12,7 @@ export const useChatContext = () => useContext(ChatContext)
 
 export default function ChatContextProvider({ children }) {
   const { user } = useAuthContext()
-  const { socketValue: { onlineUsers, messageData }, socketEmitEvent } = useSocketContext()
+  const { socketValue: { socket, onlineUsers, messageData } } = useSocketContext()
   const [ chatInfo, setChatInfo ] = useLocalStorage('chat-app-chat-info', null)
   const [ contacts, setContacts ] = useState([])
   const [ contactsWithNewMessage, setContactsWithNewMessage ] = useState(contacts)
@@ -78,7 +79,7 @@ export default function ChatContextProvider({ children }) {
       }
     )
     // socket 告知對方「自己」已讀
-    socketEmitEvent.updateMessageStatus({ 
+    socketEmitEvent(socket).updateMessageStatus({ 
       readerId: user._id,
       messageSender: chatId,
       type,

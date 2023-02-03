@@ -8,6 +8,7 @@ import { useAuthContext } from '../context/AuthContext'
 import { useChatContext } from '../context/ChatContext'
 import { useNavigate } from 'react-router-dom'
 import { useSocketContext } from '../context/SocketContext'
+import { socketEmitEvent } from '../socket/emit'
 
 
 function Navbar() {
@@ -16,22 +17,28 @@ function Navbar() {
   const { setChatInfo } = useChatContext() 
   const navigate = useNavigate()
 
-  const { socketValue: { socketId, onlineUsers }, socketEmitEvent } = useSocketContext()
+  const { socketValue: { socket, socketId, onlineUsers }, resetSocketValue } = useSocketContext()
   const [ show, setShow ] = useState(false)
 
   useEffect(() => {
     console.log('socket id', socketId)
     if (socketId) {
-      setShow(true)
-      socketEmitEvent.test()
+      setShow(true) // TODO:
     }
   }, [socketId])
 
   const handleLogout = () => {
+    console.log('logout', socketEmitEvent(socket))
     setUser(null)
     // TODO: 登出先一律清空(localStorage 不紀錄上一次聊天對象)
     setChatInfo(null)
-    socketEmitEvent.userOffline(user._id)
+    if (socketId) {
+      socketEmitEvent(socket).userOffline(user._id)
+      // socketEmitEvent.userOffline(user._id)
+      console.log('DISCONNECT')
+      resetSocketValue()
+      socket.disconnect()
+    }
   }
 
   return (

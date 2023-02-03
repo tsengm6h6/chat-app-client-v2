@@ -9,21 +9,6 @@ import { useSocketContext } from '../../context/SocketContext'
 
 function Home() {
   const { chatId } = useChatContext()
-  const { user } = useAuthContext()
-  const { socketConnect, socketValue: { socketId }, socketEmitEvent } = useSocketContext()
-
-  useEffect(() => {
-    const { disconnect } = socketConnect()
-    return () => {
-      disconnect() // TODO: 移到 APP 連線，避免 cleanup 就斷線
-    }
-  }, [])
-
-  useEffect(() => {
-    if(socketId) {
-      socketEmitEvent.userOnline(user._id)
-    }
-  }, [socketId])
 
   return (
     <Wrapper>

@@ -8,6 +8,7 @@ import { useAxios } from '../../hooks/useAxios'
 import { authAPI } from '../../api'
 import { useAuthContext } from '../../context/AuthContext'
 import { errorToast, warningToast } from '../../utils/toastify'
+import { useSocketContext } from '../../context/SocketContext'
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ function LoginForm() {
   }) 
 
   const { setUser } = useAuthContext() 
+  const { socketConnect } = useSocketContext()
   const { error, isLoading, sendRequest: postLogin } = useAxios()
 
   useEffect(() => {
@@ -36,6 +38,7 @@ function LoginForm() {
       },
       (data) => {
         setUser(data.data)
+        socketConnect()
       }
     )
   }

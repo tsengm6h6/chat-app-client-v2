@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled, { ThemeProvider } from "styled-components"
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { GlobalStyle } from './utils/style'
@@ -9,17 +9,31 @@ import SignUp from './pages/SignUp/SignUp'
 import Room from './pages/Room/Room'
 import './App.css'
 import ChatContextProvider from './context/ChatContext'
-import SocketContextProvider from './context/SocketContext'
+import { useSocketContext } from './context/SocketContext'
 import { useAuthContext } from './context/AuthContext'
 import { ToastContainer } from "react-toastify";
+import { socketEmitEvent } from './socket/emit'
 
 function App() {
   const { user } = useAuthContext() 
-  const [mode, setMode] = useState('light')
+  const [ mode, setMode ] = useState('light')
+
+  const { socketConnect, socketValue: { socket, socketId } } = useSocketContext()
+  
+  useEffect(() => {
+    if (user && !socketId) {
+      socketConnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (socketId) {
+      socketEmitEvent(socket).userOnline(user._id, socketId)
+    }
+  }, [socketId])
 
   return (
     <ThemeProvider theme={{ mode, setMode }}>
-      <SocketContextProvider>
         <ChatContextProvider>
             <Navbar />
             <Routes>
@@ -31,7 +45,6 @@ function App() {
             <GlobalStyle />
             <ToastContainer />
         </ChatContextProvider>
-      </SocketContextProvider>
     </ThemeProvider>
   )
 }

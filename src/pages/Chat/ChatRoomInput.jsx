@@ -6,6 +6,7 @@ import { useChatContext } from '../../context/ChatContext'
 import { useAuthContext } from '../../context/AuthContext'
 import { useSocketContext } from '../../context/SocketContext';
 import { useAxios } from '../../hooks/useAxios'
+import { socketEmitEvent } from '../../socket/emit'
 
 function ChatRoomInput({ setChatMessages }) {
   const [ inputMessage, setInputMessage ] = useState('')
@@ -14,7 +15,7 @@ function ChatRoomInput({ setChatMessages }) {
 
   const { user } = useAuthContext()
   const { chatId, chatInfo, updateContactLatestMessage } = useChatContext()
-  const { socketValue: { typingNotify }, socketEmitEvent, setSocketValue } = useSocketContext()
+  const { socketValue: { socket, typingNotify }, setSocketValue } = useSocketContext()
   const { sendRequest: postUserMessage } = useAxios()
   
   const handleInputSubmit = (e) => {
@@ -43,7 +44,7 @@ function ChatRoomInput({ setChatMessages }) {
         ])
 
         // 用 socket 即時通知對方
-        socketEmitEvent.sendMessage({
+        socketEmitEvent(socket).sendMessage({
           ...data.data,
           avatarImage: user.avatarImage,
           type: chatInfo.chatType, 
@@ -67,7 +68,7 @@ function ChatRoomInput({ setChatMessages }) {
     // 如果 typing 不一樣才 emit
     const newTypingStatus = inputMessage.trim() !== ''
     if (isTyping !== newTypingStatus) {
-      socketEmitEvent.userTyping({
+      socketEmitEvent(socket).userTyping({
         chatType: chatInfo.chatType,
         senderId: user._id,
         receiverId: chatId,

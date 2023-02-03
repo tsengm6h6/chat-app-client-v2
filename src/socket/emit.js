@@ -1,7 +1,7 @@
 export const socketEmitEvent = (socket) => {
   return {
-    userOnline: (userId) => {
-      socket.emit('USER_ONLINE', userId)
+    userOnline: (userId, socketId) => {
+      socket.emit('USER_ONLINE', userId, socketId)
     },
     userOffline: (userId) => {
       socket.emit('USER_OFFLINE', userId)
@@ -23,8 +23,5 @@ export const socketEmitEvent = (socket) => {
     enterChatRoom: () => {},
     leaveChatRoom: () => {},
     roomCreated: () => {},
-    test: () => {
-      socket.emit('TEST')
-    }
   }
 }

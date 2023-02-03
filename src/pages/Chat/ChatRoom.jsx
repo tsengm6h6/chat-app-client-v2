@@ -13,7 +13,7 @@ function ChatRoom() {
   const { user } = useAuthContext()
   const { chatId, chatInfo, updateMessageStatusToRead } = useChatContext()
   const { isLoading: messageLoading, sendRequest: getUserMessages } = useAxios()
-  const { socketValue: { messageData, messageReadStatus }, socketEmitEvent, setSocketValue } = useSocketContext()
+  const { socketValue: { messageData, messageReadStatus }, setSocketValue } = useSocketContext()
   
   const [ chatMessages, setChatMessages] = useState([])
 
