@@ -26,18 +26,22 @@ export default function ChatContextProvider({ children }) {
     isOnline: onlineUsers?.some(user => user.userId === contact._id) || false,
   }))
 
+  const fetchUserContacts = () => {
+    return getUserContacts(
+      {
+        method: 'GET',
+        url: chatAPI.getUserContacts(user._id)
+      },
+      (data) => {
+        setContacts(data.data)
+      }
+    )
+  }
+
   // fetch user contacts
   useEffect(() => {
     if (user) {
-      getUserContacts(
-        {
-          method: 'GET',
-          url: chatAPI.getUserContacts(user._id)
-        },
-        (data) => {
-          setContacts(data.data)
-        }
-      )
+      fetchUserContacts()
     }
   }, [user])
 
@@ -106,7 +110,8 @@ export default function ChatContextProvider({ children }) {
       handleChatSelect,
       contactsWithOnlineStatus,
       updateContactLatestMessage,
-      updateMessageStatusToRead
+      updateMessageStatusToRead,
+      fetchUserContacts
     }}>
       { children }
     </ChatContext.Provider>

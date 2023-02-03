@@ -4,32 +4,16 @@ import RoomSelectItem from './RoomSelectItem'
 import { useChatContext } from '../../context/ChatContext'
 import { PrimaryButton } from '../../components/Button'
 
-function ChatContactList({ setShow }) {
-  const { contactsWithOnlineStatus } = useChatContext()
-  const options = contactsWithOnlineStatus.filter(contact => contact.chatType !== 'room')
-  const [ selected, setSelected ] = useState([])
-
-  const handleOptionClick = (optionId) => {
-    if (selected.includes(optionId)) {
-      return setSelected(prev => prev.filter(id => id !== optionId))
-    }
-    setSelected(prev => ([...prev, optionId]))
-  }
-
-  const onSubmitSelected = (e) => {
-    e.preventDefault()
-    console.log('selected', selected)
-    setShow(prev => !prev)
-  }
+function RoomSelectList({ toggleShow, options, handleSelected }) {
 
   const renderedOptions = options.map(option => {
-    const { _id, avatarImage, ...other } = option
+    const { _id, isSelected, avatarImage, ...other } = option
     return (
       <RoomSelectItem 
         key={_id}
-        selected={selected.includes(_id)}
+        selected={isSelected}
         avatarImage={avatarImage ? `data:image/svg+xml;base64, ${avatarImage}` : '/user.png'}
-        handleItemClick={() => handleOptionClick(_id)}
+        handleItemClick={() => handleSelected(_id)}
         {...other} />
     )
   })
@@ -42,7 +26,7 @@ function ChatContactList({ setShow }) {
         {renderedOptions}
         </ListGroup>
       </List>
-      <ButtonWrapper onClick={(e) => onSubmitSelected(e)}>
+      <ButtonWrapper onClick={toggleShow}>
         <PrimaryButton>Select</PrimaryButton>
       </ButtonWrapper>
     </SelectContainer>
@@ -82,4 +66,4 @@ const ButtonWrapper = styled.div `
   justify-content: center;
 `
 
-export default ChatContactList
+export default RoomSelectList

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Container } from '../../components/MainContainer'
 import { useChatContext } from '../../context/ChatContext'
@@ -6,34 +6,70 @@ import RoomSelectList from './RoomSelectList'
 import RoomForm from './RoomForm'
 import { useAxios } from '../../hooks/useAxios'
 import { chatAPI } from '../../api'
+import { useAuthContext } from '../../context/AuthContext' 
+import { errorToast } from '../../utils/toastify'
+import { useNavigate } from 'react-router-dom'
 
 function Room() {
-  const { chatId } = useChatContext()
   const [ show, setShow ] = useState()
-  
+
+  const navigate = useNavigate()
+  const { user } = useAuthContext()
+  const { contactsWithOnlineStatus, fetchUserContacts, setChatInfo } = useChatContext()
   const { error, isLoading, sendRequest: postCreateRoom } = useAxios()
 
+  const [ selected, setSelected ] = useState([])
+  const options = contactsWithOnlineStatus
+    .filter(contact => contact.chatType !== 'room')
+    .map(contact => ({ ...contact, isSelected: selected.includes(contact._id) }))
+
+  const handleSelected = (selectedId) => {
+    selected.includes(selectedId) 
+      ? setSelected(prev => prev.filter(id => id !== selectedId))
+      : setSelected(prev => ([...prev, selectedId]))
+  }
+
   const handleRoomCreate = (formData) => {
-    console.log(formData)
-    setShow(prev => !prev)
     postCreateRoom(
       {
         method: 'POST',
-        url: chatAPI.postCreateRoom
+        url: chatAPI.postCreateRoom(user._id),
+        data: {
+          name: formData.roomname.trim(),
+          users: selected,
+          avatarImage: formData.avatarImage
+        }
       },
       (data) => {
-        console.log('create room', data)
+        fetchUserContacts()
+        setChatInfo(data.data)
+        navigate('/')
       }
     )
   }
 
+  const toggleShow = () => {
+    setShow(prev => !prev)
+  }
+
+  useEffect(() => {
+    if (error) errorToast(error.message)
+  }, [error])
+
   return (
     <Wrapper>
       <ChatContainer>
-        <RoomSelectList setShow={setShow} />
+        <RoomSelectList
+          handleSelected={handleSelected}
+          options={options} 
+          toggleShow={toggleShow}
+        />
       </ChatContainer>
       <RoomContainer className={show ? 'show' : null}>
-        <RoomForm handleRoomCreate={handleRoomCreate} />
+        <RoomForm 
+          handleRoomCreate={handleRoomCreate}
+          isLoading={isLoading}
+        />
       </RoomContainer>
     </Wrapper>
   )

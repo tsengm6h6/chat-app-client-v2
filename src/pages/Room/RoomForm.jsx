@@ -9,7 +9,7 @@ import { useAxios } from '../../hooks/useAxios'
 import { avatarGenerator } from '../../utils/avatarGenerator'
 import { warningToast } from '../../utils/toastify'
 
-function RoomForm({ handleRoomCreate }) {
+function RoomForm({ handleRoomCreate, isLoading }) {
   const [formData, setFormData] = useState({
     roomname: '',
     avatarImage: ''
@@ -67,7 +67,7 @@ function RoomForm({ handleRoomCreate }) {
           avatar={formData.avatarImage} 
           onGenerate={handleGenerate} 
         />
-        <PrimaryButton>Send</PrimaryButton>
+        <PrimaryButton>{ isLoading ? 'Loading...' : 'Confirm' }</PrimaryButton>
       </Form>
     </MainContainer>
   )
