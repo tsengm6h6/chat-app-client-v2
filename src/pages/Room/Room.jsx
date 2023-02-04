@@ -72,7 +72,7 @@ function Room() {
         <RoomSelectList handleSelected={handleSelected} options={options} toggleShow={toggleShow} />
       </ChatContainer>
       <RoomContainer className={show ? 'show' : null}>
-        <RoomForm handleRoomCreate={handleRoomCreate} isLoading={isLoading} />
+        <RoomForm handleRoomCreate={handleRoomCreate} isLoading={isLoading} toggleShow={toggleShow} />
       </RoomContainer>
     </Wrapper>
   );
@@ -89,11 +89,12 @@ const Wrapper = styled.div`
 `;
 
 const ChatContainer = styled(Container)`
-  overflow: auto;
+  overflow: hidden;
   height: calc(100vh - 80px);
   background-color: var(--bg-color-main);
   align-items: flex-start;
-  padding: 0 0;
+  padding: 40px 0 0 0;
+  min-height: none;
 
   @media screen and (min-width: 768px) {
     max-width: calc(480px + 2rem);
@@ -109,7 +110,6 @@ const RoomContainer = styled(ChatContainer)`
   transform: translateX(100%) scale(1, 1);
   transform-origin: right;
   transition: transform 0.3s ease-in-out;
-  /* background-color: palevioletred; */
 
   &.show {
     transform: translateX(0) scale(1, 1);

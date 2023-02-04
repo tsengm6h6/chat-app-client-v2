@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import RoomSelectItem from './RoomSelectItem';
 import { PrimaryButton } from '../../components/Button';
+import { IoArrowRedo } from 'react-icons/io5';
 
 function RoomSelectList({ toggleShow, options, handleSelected }) {
   const renderedOptions = options.map((option) => {
@@ -21,10 +22,15 @@ function RoomSelectList({ toggleShow, options, handleSelected }) {
     <SelectContainer>
       <GroupTitle>Select your room members</GroupTitle>
       <List>
-        <ListGroup>{renderedOptions}</ListGroup>
+        <ListItem>{renderedOptions}</ListItem>
       </List>
       <ButtonWrapper onClick={toggleShow}>
-        <PrimaryButton>Select</PrimaryButton>
+        <PrimaryButton>
+          Next
+          <IconWrapper>
+            <IoArrowRedo />
+          </IconWrapper>
+        </PrimaryButton>
       </ButtonWrapper>
     </SelectContainer>
   );
@@ -38,16 +44,38 @@ RoomSelectList.propTypes = {
 
 const SelectContainer = styled.div`
   width: 100%;
+  height: 100%;
   max-width: 480px;
-  margin-top: 40px;
+  display: grid;
+  grid-template-rows: repeat(1fr, 1fr, 1fr);
+`;
+
+const GroupTitle = styled.h3`
+  grid-row: 1/ 2;
+  align-self: flex-end;
+  padding-left: 1rem;
+  font-size: 1.25rem;
+  color: var(--main-color);
+  text-transform: capitalize;
 `;
 
 const List = styled.div`
-  height: 70vh;
+  grid-row: 2/ 3;
   overflow: auto;
 `;
 
-const ListGroup = styled.ul`
+const ButtonWrapper = styled.div`
+  grid-row: 3/ 4;
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const ListItem = styled.ul`
   width: 100%;
   padding: 1rem;
   display: flex;
@@ -55,18 +83,10 @@ const ListGroup = styled.ul`
   align-items: center;
 `;
 
-const GroupTitle = styled.h3`
-  padding-left: 1rem;
-  font-size: 1.25rem;
-  color: var(--main-color);
-  align-self: flex-start;
-  text-transform: capitalize;
-`;
-
-const ButtonWrapper = styled.div`
-  margin: 1rem;
-  display: flex;
-  justify-content: center;
+const IconWrapper = styled.span`
+  position: relative;
+  top: 2px;
+  margin-left: 0.5rem;
 `;
 
 export default RoomSelectList;

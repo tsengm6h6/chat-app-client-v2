@@ -73,9 +73,10 @@ const GenerateButton = styled.button`
   outline: none;
   background-color: var(--bg-color-main);
   border-radius: 4px;
-  border: 1.5px solid var(--secondary);
+  border: 1.5px solid var(--primary);
   padding: 0.5rem;
   cursor: pointer;
+  filter: saturate(90%);
 
   &:hover {
     background-color: var(--bg-color-darken);
@@ -98,7 +99,7 @@ const IconWrapper = styled.div`
   justify-content: center;
   font-size: 1rem;
   margin-right: 0.5rem;
-  color: var(--secondary);
+  color: var(--primary);
   font-weight: 900;
   animation: ${(props) => (props.isLoading ? rotate : null)} 2s linear infinite;
 `;

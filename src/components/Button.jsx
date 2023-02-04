@@ -7,13 +7,22 @@ const StyledButton = styled.button`
   padding: 1rem;
   font-size: 1rem;
   letter-spacing: 1px;
-  margin: 0.5rem 0;
+  margin-bottom: 0.5rem;
   border-radius: 4px;
   background-color: var(--bg-color-main);
   color: var(--secondary);
   border: 2px solid var(--secondary);
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   filter: ${(props) => (props.disabled ? 'grayscale(10%) saturate(80%) brightness(1.3)' : null)};
+  box-shadow: 1px 1px 4px var(--shadow-color);
+
+  &:not(:last-child) {
+    margin-top: 0.5rem;
+  }
+
+  &:hover {
+    filter: contrast(90%) brightness(120%);
+  }
 `;
 
 const StyledPrimaryButton = styled(StyledButton)`

@@ -3,14 +3,15 @@ import { useState, useEffect, useCallback } from 'react';
 import MainContainer from '../../components/MainContainer';
 import Form from '../../components/Form';
 import AvatarUploader from '../../components/AvatarUploader';
-import { PrimaryButton } from '../../components/Button';
+import { Button, PrimaryButton } from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import styled from 'styled-components';
 import { useAxios } from '../../hooks/useAxios';
 import { avatarGenerator } from '../../utils/avatarGenerator';
 import { warningToast } from '../../utils/toastify';
+import { IoArrowUndo } from 'react-icons/io5';
 
-function RoomForm({ handleRoomCreate, isLoading }) {
+function RoomForm({ handleRoomCreate, isLoading, toggleShow }) {
   const [formData, setFormData] = useState({
     roomname: '',
     avatarImage: ''
@@ -62,6 +63,20 @@ function RoomForm({ handleRoomCreate, isLoading }) {
           onGenerate={handleGenerate}
         />
         <PrimaryButton>{isLoading ? 'Loading...' : 'Confirm'}</PrimaryButton>
+        <DisplayControl>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              toggleShow();
+            }}
+          >
+            <IconWrapper>
+              <IoArrowUndo />
+            </IconWrapper>
+            Back
+          </Button>
+        </DisplayControl>
       </Form>
     </MainContainer>
   );
@@ -69,7 +84,8 @@ function RoomForm({ handleRoomCreate, isLoading }) {
 
 RoomForm.propTypes = {
   handleRoomCreate: PropTypes.func,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  toggleShow: PropTypes.func
 };
 
 const FormTitle = styled.h1`
@@ -78,6 +94,22 @@ const FormTitle = styled.h1`
   letter-spacing: 1px;
   text-align: center;
   margin: 0.5rem 0;
+`;
+
+const DisplayControl = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const IconWrapper = styled.span`
+  position: relative;
+  top: 2px;
+  margin-right: 0.5rem;
 `;
 
 export default RoomForm;
