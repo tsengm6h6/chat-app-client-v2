@@ -43,7 +43,6 @@ function Navbar() {
         <NavLogo>
           <NavImage src="/talking.png" alt="brand=logo" />
           <NavBrand>ChatBot</NavBrand>
-          {show && socketId}
           {show && onlineUsers && <NavCount> 上線人數：{onlineUsers.length || 0}</NavCount>}
         </NavLogo>
       </Link>
