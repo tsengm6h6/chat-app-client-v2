@@ -28,7 +28,6 @@ function Navbar() {
   const handleLogout = () => {
     console.log('logout', socketEmitEvent(socket));
     setUser(null);
-    // TODO: 登出先一律清空(localStorage 不紀錄上一次聊天對象)
     setChatInfo(null);
     if (socketId) {
       socketEmitEvent(socket).userOffline(user._id);
