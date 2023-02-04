@@ -50,5 +50,11 @@ export const socketListenEvent = (socket, { setSocketValue }) => {
   });
 
   // someone invited user to room
-  socket.on('INVITED_TO_ROOM', () => {});
+  socket.on('INVITED_TO_ROOM', ({ message }) => {
+    console.log('invited', message);
+    setSocketValue((prev) => ({
+      ...prev,
+      invitedNotify: message
+    }));
+  });
 };

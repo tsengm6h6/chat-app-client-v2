@@ -8,14 +8,13 @@ import { useAuthContext } from '../../context/AuthContext';
 import { useSocketContext } from '../../context/SocketContext';
 import { chatAPI } from '../../api';
 import { useAxios } from '../../hooks/useAxios';
-import { defaultToast } from '../../utils/toastify';
 
 function ChatRoom() {
   const { user } = useAuthContext();
   const { chatId, chatInfo, updateMessageStatusToRead } = useChatContext();
   const { isLoading: messageLoading, sendRequest: getUserMessages } = useAxios();
   const {
-    socketValue: { messageData, messageReadStatus, roomNotify },
+    socketValue: { messageData, messageReadStatus },
     resetSocketValue
   } = useSocketContext();
 
@@ -95,15 +94,6 @@ function ChatRoom() {
       }
     }
   }, [messageReadStatus, chatId]);
-
-  useEffect(() => {
-    if (roomNotify && chatInfo?.chatType === 'room') {
-      defaultToast(roomNotify);
-    }
-    return () => {
-      resetSocketValue('roomNotify');
-    };
-  }, [roomNotify, chatInfo, resetSocketValue]);
 
   return (
     <RoomWrapper>

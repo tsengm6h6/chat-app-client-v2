@@ -9,7 +9,8 @@ const INIT_SOCKET_STATE = {
   messageData: null,
   messageReadStatus: null,
   typingNotify: null,
-  roomNotify: null
+  roomNotify: null,
+  invitedNotify: null
 };
 
 const SocketContext = createContext(INIT_SOCKET_STATE);

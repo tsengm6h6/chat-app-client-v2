@@ -9,6 +9,8 @@ import { chatAPI } from '../../api';
 import { useAuthContext } from '../../context/AuthContext';
 import { errorToast } from '../../utils/toastify';
 import { useNavigate } from 'react-router-dom';
+import { socketEmitEvent } from '../../socket/emit';
+import { useSocketContext } from '../../context/SocketContext';
 
 function Room() {
   const [show, setShow] = useState();
@@ -16,6 +18,9 @@ function Room() {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { contactsWithOnlineStatus, fetchUserContacts, setChatInfo } = useChatContext();
+  const {
+    socketValue: { socket }
+  } = useSocketContext();
   const { error, isLoading, sendRequest: postCreateRoom } = useAxios();
 
   const [selected, setSelected] = useState([]);
@@ -43,6 +48,11 @@ function Room() {
       (data) => {
         fetchUserContacts();
         setChatInfo(data.data);
+        socketEmitEvent(socket).roomCreated({
+          name: formData.roomname.trim(),
+          creator: user.name,
+          invitedUser: selected
+        });
         navigate('/');
       }
     );

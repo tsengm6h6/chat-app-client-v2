@@ -1,12 +1,36 @@
-import React from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Container } from '../../components/MainContainer';
 import ChatContactList from './ChatContactList';
 import ChatRoom from '../Chat/ChatRoom';
 import { useChatContext } from '../../context/ChatContext';
+import { useSocketContext } from '../../context/SocketContext';
+import { defaultToast } from '../../utils/toastify';
 
 function Home() {
-  const { chatId } = useChatContext();
+  const { chatId, chatInfo } = useChatContext();
+  const {
+    socketValue: { roomNotify, invitedNotify },
+    resetSocketValue
+  } = useSocketContext();
+
+  useEffect(() => {
+    if (invitedNotify) {
+      defaultToast(invitedNotify);
+    }
+    return () => {
+      resetSocketValue('invitedNotify');
+    };
+  }, [invitedNotify, resetSocketValue]);
+
+  useEffect(() => {
+    if (roomNotify && chatInfo?.chatType === 'room') {
+      defaultToast(roomNotify);
+    }
+    return () => {
+      resetSocketValue('roomNotify');
+    };
+  }, [roomNotify, chatInfo, resetSocketValue]);
 
   return (
     <Wrapper>

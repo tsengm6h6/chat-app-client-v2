@@ -32,6 +32,9 @@ export const socketEmitEvent = (socket) => {
       console.log('=== leave chat room ===', data);
       socket.emit('LEAVE_CHAT_ROOM', data);
     },
-    roomCreated: () => {}
+    roomCreated: (data) => {
+      console.log('** create room **', data);
+      socket.emit('ROOM_CREATED', data);
+    }
   };
 };
