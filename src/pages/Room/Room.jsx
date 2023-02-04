@@ -17,14 +17,14 @@ function Room() {
 
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { contactsWithOnlineStatus, fetchUserContacts, setChatInfo } = useChatContext();
+  const { contacts, fetchUserContacts, setChatInfo } = useChatContext();
   const {
     socketValue: { socket }
   } = useSocketContext();
   const { error, isLoading, sendRequest: postCreateRoom } = useAxios();
 
   const [selected, setSelected] = useState([]);
-  const options = contactsWithOnlineStatus
+  const options = contacts
     .filter((contact) => contact.chatType !== 'room')
     .map((contact) => ({ ...contact, isSelected: selected.includes(contact._id) }));
 

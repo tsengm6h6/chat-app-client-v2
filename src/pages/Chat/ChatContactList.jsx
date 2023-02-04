@@ -5,13 +5,13 @@ import { useChatContext } from '../../context/ChatContext';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 
 function ChatContactList() {
-  const { contactsWithOnlineStatus, handleChatSelect } = useChatContext();
+  const { contacts, handleChatSelect } = useChatContext();
   const [display, setDisplay] = useState({
     rooms: true,
     users: true
   });
 
-  const contactGroups = contactsWithOnlineStatus.reduce(
+  const contactGroups = contacts.reduce(
     (prev, curr) => {
       curr?.chatType === 'room' ? prev.rooms.push(curr) : prev.users.push(curr);
       return prev;

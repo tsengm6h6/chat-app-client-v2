@@ -4,11 +4,11 @@ import { IoArrowUndo } from 'react-icons/io5';
 import Avatar, { MultiAvatar } from '../../components/Avatar';
 
 function ChatRoomHeader() {
-  const { chatInfo, setChatInfo, contactsWithOnlineStatus } = useChatContext();
+  const { chatInfo, setChatInfo, contacts } = useChatContext();
 
   const roomUsersId = chatInfo?.users || [];
   const multipleAvatar = roomUsersId.map((userId) => {
-    const user = contactsWithOnlineStatus?.find((contact) => contact._id === userId);
+    const user = contacts?.find((contact) => contact._id === userId);
     return user ? (
       <MultiAvatar
         key={user._id}

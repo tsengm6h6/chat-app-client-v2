@@ -23,10 +23,6 @@ function ChatContextProvider({ children }) {
   const { sendRequest: updateReadStatus } = useAxios();
 
   const chatId = chatInfo?._id || null;
-  const contactsWithOnlineStatus = contacts.map((contact) => ({
-    ...contact,
-    isOnline: onlineUsers?.some((user) => user.userId === contact._id) || false
-  }));
 
   const fetchUserContacts = useCallback(() => {
     if (user) {
@@ -36,11 +32,15 @@ function ChatContextProvider({ children }) {
           url: chatAPI.getUserContacts(user._id)
         },
         (data) => {
-          setContacts(data.data);
+          const contactsWithOnlineStatus = data.data.map((contact) => ({
+            ...contact,
+            isOnline: onlineUsers?.some((user) => user.userId === contact._id) || false
+          }));
+          setContacts(contactsWithOnlineStatus);
         }
       );
     }
-  }, [user, getUserContacts]);
+  }, [user, getUserContacts, onlineUsers]);
 
   // fetch user contacts
   useEffect(() => {
@@ -89,12 +89,6 @@ function ChatContextProvider({ children }) {
       })
     });
     // socket 告知對方「自己」已讀
-    // socketEmitEvent(socket).updateMessageStatus({
-    //   readerId: user._id,
-    //   messageSender: chatId,
-    //   type
-    // });
-    // TODO:
     socketEmitEvent(socket).updateMessageReaders({
       readerId: user._id,
       toId: chatId,
@@ -124,9 +118,9 @@ function ChatContextProvider({ children }) {
         chatId,
         chatInfo,
         setChatInfo,
+        contacts,
         setContacts,
         handleChatSelect,
-        contactsWithOnlineStatus,
         updateContactLatestMessage,
         updateMessageStatusToRead,
         fetchUserContacts
