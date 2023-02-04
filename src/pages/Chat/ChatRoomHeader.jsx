@@ -1,10 +1,23 @@
 import styled from 'styled-components';
 import { useChatContext } from '../../context/ChatContext';
 import { IoArrowUndo } from 'react-icons/io5';
-import Avatar from '../../components/Avatar';
+import Avatar, { MultiAvatar } from '../../components/Avatar';
 
 function ChatRoomHeader() {
-  const { chatInfo, setChatInfo } = useChatContext();
+  const { chatInfo, setChatInfo, contactsWithOnlineStatus } = useChatContext();
+
+  const roomUsersId = chatInfo?.users || [];
+  const multipleAvatar = roomUsersId.map((userId) => {
+    const user = contactsWithOnlineStatus?.find((contact) => contact._id === userId);
+    console.log('userId', userId, user);
+    return user ? (
+      <MultiAvatar
+        key={user._id}
+        size="small"
+        src={user?.avatarImage ? `data:image/svg+xml;base64,${user.avatarImage}` : '/user.png'}
+      />
+    ) : null;
+  });
 
   return (
     chatInfo !== null && (
@@ -16,6 +29,7 @@ function ChatRoomHeader() {
         </HeaderIcon>
         <HeaderName>{chatInfo?.name}</HeaderName>
         <HeaderMembers>
+          {roomUsersId.length > 0 && multipleAvatar}
           <Avatar
             size="small"
             src={chatInfo?.avatarImage ? `data:image/svg+xml;base64,${chatInfo.avatarImage}` : '/user.png'}

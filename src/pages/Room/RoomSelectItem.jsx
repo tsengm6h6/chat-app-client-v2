@@ -46,6 +46,7 @@ const ListItem = styled.li`
   &:hover {
     box-shadow: ${(props) =>
       props.selected ? 'inset -2px -2px 4px var(--shadow-color-primary)' : '2px 2px 4px var(--shadow-color)'};
+    filter: contrast(95%);
   }
 
   &:active {
