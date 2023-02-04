@@ -1,50 +1,53 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
-import { HiOutlineRefresh } from "react-icons/hi";
+import PropTypes from 'prop-types';
+import styled, { keyframes } from 'styled-components';
+import { HiOutlineRefresh } from 'react-icons/hi';
 
 function AvatarUploader({ error, isLoading, avatar, onGenerate }) {
   return (
     <Wrapper>
       <AvatarBox>
-        {
-          avatar ? (
-            <AvatarImage 
-              error={error}
-              isLoading={isLoading}
-              src={`data:image/svg+xml;base64,${avatar}`} 
-              alt="user-avatar" />
-          ) : null
-        }
+        {avatar ? (
+          <AvatarImage
+            error={error}
+            isLoading={isLoading}
+            src={`data:image/svg+xml;base64,${avatar}`}
+            alt="user-avatar"
+          />
+        ) : null}
       </AvatarBox>
       <GenerateButton onClick={onGenerate}>
         <IconWrapper isLoading={isLoading}>
           <HiOutlineRefresh />
         </IconWrapper>
-        <ButtonText>
-          { error ? 'Please try again later' : isLoading ? 'Generating...' : 'Generate Avatar' }
-        </ButtonText>
+        <ButtonText>{error ? 'Please try again later' : isLoading ? 'Generating...' : 'Generate Avatar'}</ButtonText>
       </GenerateButton>
     </Wrapper>
-  )
+  );
 }
 
-const Wrapper = styled.div `
+AvatarUploader.propTypes = {
+  error: PropTypes.object,
+  isLoading: PropTypes.bool,
+  avatar: PropTypes.string,
+  onGenerate: PropTypes.func
+};
+
+const Wrapper = styled.div`
   margin: 0.5rem 0;
   display: flex;
   align-items: center;
   width: 80%;
   gap: 1rem;
-`
+`;
 
-
-const AvatarBox = styled.div `
+const AvatarBox = styled.div`
   display: block;
   width: 80px;
   height: 80px;
   border-radius: 4px;
   background-color: var(--bg-color-darken);
   padding: 0.5rem;
-`
+`;
 
 const fadeout = keyframes`
   from {
@@ -56,12 +59,12 @@ const fadeout = keyframes`
   }
 `;
 
-const AvatarImage = styled.img `
-  animation: ${props => props.isLoading ? fadeout : null } 2s ease-out;
-  animation-fill-mode: ${props => props.error ? 'backwards' : 'forwards'};
-`
+const AvatarImage = styled.img`
+  animation: ${(props) => (props.isLoading ? fadeout : null)} 2s ease-out;
+  animation-fill-mode: ${(props) => (props.error ? 'backwards' : 'forwards')};
+`;
 
-const GenerateButton = styled.button `
+const GenerateButton = styled.button`
   flex: 1;
   align-self: flex-end;
   display: flex;
@@ -77,7 +80,7 @@ const GenerateButton = styled.button `
   &:hover {
     background-color: var(--bg-color-darken);
   }
-`
+`;
 
 const rotate = keyframes`
   from {
@@ -89,8 +92,7 @@ const rotate = keyframes`
   }
 `;
 
-
-const IconWrapper = styled.div `
+const IconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,12 +100,12 @@ const IconWrapper = styled.div `
   margin-right: 0.5rem;
   color: var(--secondary);
   font-weight: 900;
-  animation: ${props => props.isLoading ? rotate : null } 2s linear infinite;
-`
+  animation: ${(props) => (props.isLoading ? rotate : null)} 2s linear infinite;
+`;
 
-const ButtonText = styled.p `
+const ButtonText = styled.p`
   text-align: start;
   color: var(--main-color);
-`
+`;
 
-export default AvatarUploader
+export default AvatarUploader;

@@ -1,14 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { Container } from '../../components/MainContainer'
-import ChatContactList from './ChatContactList'
-import ChatRoom from '../Chat/ChatRoom'
-import { useChatContext } from '../../context/ChatContext'
-import { useAuthContext } from '../../context/AuthContext'
-import { useSocketContext } from '../../context/SocketContext'
+import React from 'react';
+import styled from 'styled-components';
+import { Container } from '../../components/MainContainer';
+import ChatContactList from './ChatContactList';
+import ChatRoom from '../Chat/ChatRoom';
+import { useChatContext } from '../../context/ChatContext';
 
 function Home() {
-  const { chatId } = useChatContext()
+  const { chatId } = useChatContext();
 
   return (
     <Wrapper>
@@ -19,10 +17,10 @@ function Home() {
         <ChatRoom key={chatId} />
       </RoomContainer>
     </Wrapper>
-  )
+  );
 }
 
-const Wrapper = styled.div `
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -30,21 +28,21 @@ const Wrapper = styled.div `
   @media screen and (min-width: 768px) {
     flex-direction: row;
   }
-`
+`;
 
-const ChatContainer = styled(Container) `
+const ChatContainer = styled(Container)`
   overflow: auto;
   height: calc(100vh - 80px);
   background-color: var(--bg-color-main);
   align-items: flex-start;
-  padding: 0 0 ;
+  padding: 0 0;
 
   @media screen and (min-width: 768px) {
     max-width: calc(480px + 2rem);
   }
-`
+`;
 
-const RoomContainer = styled(ChatContainer) `
+const RoomContainer = styled(ChatContainer)`
   padding: 0;
   position: absolute;
   top: 0;
@@ -65,6 +63,6 @@ const RoomContainer = styled(ChatContainer) `
     transition: none;
     max-width: 100%;
   }
-`
+`;
 
-export default Home
+export default Home;

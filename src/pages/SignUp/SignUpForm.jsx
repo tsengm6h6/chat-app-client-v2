@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import Form from '../../components/Form'
-import TextInput from '../../components/TextInput'
-import AvatarUploader from '../../components/AvatarUploader'
-import { PrimaryButton } from '../../components/Button'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import { useAxios } from '../../hooks/useAxios'
-import { errorToast, warningToast } from '../../utils/toastify'
-import { authAPI } from '../../api'
-import { useAuthContext } from '../../context/AuthContext'
-import { avatarGenerator } from '../../utils/avatarGenerator'
+import React, { useState, useEffect, useCallback } from 'react';
+import Form from '../../components/Form';
+import TextInput from '../../components/TextInput';
+import AvatarUploader from '../../components/AvatarUploader';
+import { PrimaryButton } from '../../components/Button';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { useAxios } from '../../hooks/useAxios';
+import { errorToast, warningToast } from '../../utils/toastify';
+import { authAPI } from '../../api';
+import { useAuthContext } from '../../context/AuthContext';
+import { avatarGenerator } from '../../utils/avatarGenerator';
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -18,40 +18,43 @@ function SignUpForm() {
     password: '',
     confirmPassword: '',
     avatarImage: ''
-  })
-  const { setUser } = useAuthContext() 
+  });
+  const { setUser } = useAuthContext();
 
-  const { error: submitError, isLoading: submitLoading, sendRequest: postRegister } = useAxios()
-  const { error: avatarError, isLoading: avatarLoading, sendRequest: fetchRandomAvatar } = useAxios()
+  const { error: submitError, isLoading: submitLoading, sendRequest: postRegister } = useAxios();
+  const { error: avatarError, isLoading: avatarLoading, sendRequest: fetchRandomAvatar } = useAxios();
 
   useEffect(() => {
-    if (submitError) errorToast(submitError.message)
-  }, [submitError])
+    if (submitError) errorToast(submitError.message);
+  }, [submitError]);
+
+  const generateAvatar = useCallback(() => {
+    avatarGenerator(fetchRandomAvatar, (avatar) => {
+      setFormData((prev) => ({
+        ...prev,
+        avatarImage: avatar
+      }));
+    });
+  }, [fetchRandomAvatar]);
 
   const submitValidator = () => {
-    const {
-      username,
-      email,
-      password,
-      confirmPassword,
-      avatarImage
-    } = formData
+    const { username, email, password, confirmPassword, avatarImage } = formData;
 
-    const checkArray = [username, email, password, confirmPassword, avatarImage]
-    if (checkArray.some(el => el === '')) {
-      warningToast('All fields are required!')
-      return false
+    const checkArray = [username, email, password, confirmPassword, avatarImage];
+    if (checkArray.some((el) => el === '')) {
+      warningToast('All fields are required!');
+      return false;
     }
     if (password !== confirmPassword) {
-      warningToast('Password is not equal to confirm password.')
-      return false
+      warningToast('Password is not equal to confirm password.');
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const isValid = submitValidator()
+    e.preventDefault();
+    const isValid = submitValidator();
     if (isValid) {
       postRegister(
         {
@@ -60,106 +63,90 @@ function SignUpForm() {
           data: { ...formData }
         },
         (data) => {
-          setUser(data.data)
+          setUser(data.data);
         }
-      )
+      );
     }
-  }
+  };
 
   const handleInputChange = (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value
-    }))
-  }
+    }));
+  };
 
   const handleGenerate = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    avatarGenerator(
-      fetchRandomAvatar,
-      (avatar) => {
-        setFormData(prev => ({
-          ...prev,
-          avatarImage: avatar
-        }))
-      }
-    )
-  }
+    e.preventDefault();
+    e.stopPropagation();
+    generateAvatar();
+  };
 
   useEffect(() => {
-    avatarGenerator(
-      fetchRandomAvatar,
-      (avatar) => {
-        setFormData(prev => ({
-          ...prev,
-          avatarImage: avatar
-        }))
-      }
-    )
-  }, [])
+    generateAvatar();
+  }, [generateAvatar]);
 
   return (
     <Form onSubmit={handleSubmit}>
       <FormTitle>Sign Up</FormTitle>
-      <TextInput 
-        type="text" 
+      <TextInput
+        type="text"
         placeholder="User Name"
         name="username"
         id="username"
         value={formData.username}
         onChange={handleInputChange}
       />
-      <TextInput 
-        type="email" 
+      <TextInput
+        type="email"
         placeholder="User Email"
         name="email"
         id="email"
         value={formData.email}
         onChange={handleInputChange}
       />
-      <TextInput 
-        type="password" 
+      <TextInput
+        type="password"
         placeholder="Password"
         name="password"
         id="password"
         value={formData.password}
         onChange={handleInputChange}
       />
-      <TextInput 
-        type="password" 
+      <TextInput
+        type="password"
         placeholder="Confirm Password"
         name="confirmPassword"
         id="confirmPassword"
         value={formData.confirmPassword}
         onChange={handleInputChange}
       />
-      <AvatarUploader 
+      <AvatarUploader
         error={avatarError}
         isLoading={avatarLoading}
-        avatar={formData.avatarImage} 
-        onGenerate={handleGenerate} 
+        avatar={formData.avatarImage}
+        onGenerate={handleGenerate}
       />
       <PrimaryButton disabled={avatarLoading}>{submitLoading ? 'Submitting...' : 'Sign Up'}</PrimaryButton>
       <LoginSpan>
-        Already have an account ? 
+        Already have an account ?
         <Link to="/login">
           <span>login</span>
         </Link>
       </LoginSpan>
     </Form>
-  )
+  );
 }
 
-const FormTitle = styled.h1 `
+const FormTitle = styled.h1`
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
   text-align: center;
   margin: 0.5rem 0;
-`
+`;
 
-const LoginSpan = styled.p `
+const LoginSpan = styled.p`
   font-size: 0.75rem;
 
   a {
@@ -177,6 +164,6 @@ const LoginSpan = styled.p `
       text-decoration: underline;
     }
   }
-`
+`;
 
-export default SignUpForm
+export default SignUpForm;

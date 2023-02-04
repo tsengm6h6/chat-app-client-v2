@@ -1,19 +1,19 @@
-import { createGlobalStyle, css } from 'styled-components'
+import { createGlobalStyle, css } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
   body {
       ${(props) => {
-        switch(props.theme.mode) {
-          case "dark": 
-            return css `
-              --bg-color-main: #1D1E23ff;
-              --bg-color-darken: #16171Bff;
+        switch (props.theme.mode) {
+          case 'dark':
+            return css`
+              --bg-color-main: #1d1e23ff;
+              --bg-color-darken: #16171bff;
               --shadow-color: #090808;
               --shadow-color-primary: #acb324;
-              --main-color: #FBFBFCff;
-              --primary: #F3FB8Aff;
-              --secondary: #B785F6ff;
-              --warning: #A3DA30ff;
+              --main-color: #fbfbfcff;
+              --primary: #f3fb8aff;
+              --secondary: #b785f6ff;
+              --warning: #a3da30ff;
               --danger: #ff758f;
               --toastify-color-light: var(--bg-color-main);
               --toastify-color-dark: var(--bg-color-darken);
@@ -27,16 +27,16 @@ export const GlobalStyle = createGlobalStyle`
               --toastify-text-color-error: var(--main-color);
             `;
           default:
-            return css `
-              --bg-color-main: #FFFFFFff;
-              --bg-color-darken: #F6F7FBff;
+            return css`
+              --bg-color-main: #ffffffff;
+              --bg-color-darken: #f6f7fbff;
               --shadow-color: #e4e4e4;
               --shadow-color-primary: #328f76;
-              --main-color: #3D3D3Fff;
-              --primary: #3AA589ff;
-              --secondary: #4E416Cff;
-              --warning: #E9AD8Fff;
-              --danger: #C37E91ff;
+              --main-color: #3d3d3fff;
+              --primary: #3aa589ff;
+              --secondary: #4e416cff;
+              --warning: #e9ad8fff;
+              --danger: #c37e91ff;
               --toastify-color-light: var(--bg-color-main);
               --toastify-color-dark: var(--bg-color-darken);
               --toastify-color-info: var(--secondary);
@@ -47,9 +47,9 @@ export const GlobalStyle = createGlobalStyle`
               --toastify-text-color-success: var(--main-color);
               --toastify-text-color-warning: var(--main-color);
               --toastify-text-color-error: var(--main-color);
-            `
+            `;
         }
-    }}
+      }}
     color: var(--main-color);
     background-color: var(--bg-color-darken);
     
@@ -100,4 +100,4 @@ export const GlobalStyle = createGlobalStyle`
     }
   
   }
-`
+`;

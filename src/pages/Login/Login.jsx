@@ -1,6 +1,6 @@
-import React from 'react'
-import MainContainer from '../../components/MainContainer'
-import LoginForm from './LoginForm'
+import React from 'react';
+import MainContainer from '../../components/MainContainer';
+import LoginForm from './LoginForm';
 
 function Login() {
   return (
@@ -9,7 +9,7 @@ function Login() {
         <LoginForm />
       </MainContainer>
     </>
-  )
+  );
 }
 
-export default Login
+export default Login;

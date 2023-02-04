@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react'
-import Form from '../../components/Form'
-import TextInput from '../../components/TextInput'
-import { PrimaryButton } from '../../components/Button'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import { useAxios } from '../../hooks/useAxios'
-import { authAPI } from '../../api'
-import { useAuthContext } from '../../context/AuthContext'
-import { errorToast, warningToast } from '../../utils/toastify'
-import { useSocketContext } from '../../context/SocketContext'
+import React, { useState, useEffect } from 'react';
+import Form from '../../components/Form';
+import TextInput from '../../components/TextInput';
+import { PrimaryButton } from '../../components/Button';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { useAxios } from '../../hooks/useAxios';
+import { authAPI } from '../../api';
+import { useAuthContext } from '../../context/AuthContext';
+import { errorToast, warningToast } from '../../utils/toastify';
+import { useSocketContext } from '../../context/SocketContext';
 
 function LoginForm() {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
-  }) 
+  });
 
-  const { setUser } = useAuthContext() 
-  const { socketConnect } = useSocketContext()
-  const { error, isLoading, sendRequest: postLogin } = useAxios()
+  const { setUser } = useAuthContext();
+  const { socketConnect } = useSocketContext();
+  const { error, isLoading, sendRequest: postLogin } = useAxios();
 
   useEffect(() => {
-    if (error) errorToast(error.message)
-  }, [error])
+    if (error) errorToast(error.message);
+  }, [error]);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!formData.username || !formData.password) {
-      warningToast('All fields are required!')
-      return
+      warningToast('All fields are required!');
+      return;
     }
     postLogin(
       {
@@ -37,60 +37,58 @@ function LoginForm() {
         data: { ...formData }
       },
       (data) => {
-        setUser(data.data)
-        socketConnect()
+        setUser(data.data);
+        socketConnect();
       }
-    )
-  }
+    );
+  };
 
   const handleInputChange = (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value
-    }))
-  }
+    }));
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
       <FormTitle>Login</FormTitle>
-      <TextInput 
-        type="text" 
+      <TextInput
+        type="text"
         placeholder="User Name"
         name="username"
         id="username"
         value={formData.username}
         onChange={handleInputChange}
       />
-      <TextInput 
-        type="password" 
+      <TextInput
+        type="password"
         placeholder="Password"
         name="password"
         id="password"
         value={formData.password}
         onChange={handleInputChange}
       />
-      <PrimaryButton>
-        { isLoading ? 'Loading...' : 'Login' }
-      </PrimaryButton>
+      <PrimaryButton>{isLoading ? 'Loading...' : 'Login'}</PrimaryButton>
       <LoginSpan>
-        Do not have an account ? 
+        Do not have an account ?
         <Link to="/signup">
           <span>sign up</span>
         </Link>
       </LoginSpan>
     </Form>
-  )
+  );
 }
 
-const FormTitle = styled.h1 `
+const FormTitle = styled.h1`
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
   text-align: center;
   margin: 0.5rem 0;
-`
+`;
 
-const LoginSpan = styled.p `
+const LoginSpan = styled.p`
   font-size: 0.75rem;
 
   a {
@@ -108,6 +106,6 @@ const LoginSpan = styled.p `
       text-decoration: underline;
     }
   }
-`
+`;
 
-export default LoginForm
+export default LoginForm;

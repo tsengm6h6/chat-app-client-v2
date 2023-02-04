@@ -1,6 +1,6 @@
-import React from 'react'
-import MainContainer from '../../components/MainContainer'
-import SignUpForm from './SignUpForm'
+import React from 'react';
+import MainContainer from '../../components/MainContainer';
+import SignUpForm from './SignUpForm';
 
 function SignUp() {
   return (
@@ -9,7 +9,7 @@ function SignUp() {
         <SignUpForm />
       </MainContainer>
     </>
-  )
+  );
 }
 
-export default SignUp
+export default SignUp;

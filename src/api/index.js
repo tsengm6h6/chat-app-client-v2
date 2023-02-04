@@ -1,7 +1,4 @@
-import { authAPI } from './auth'
-import { chatAPI } from './chat'
+import { authAPI } from './auth';
+import { chatAPI } from './chat';
 
-export {
-  authAPI,
-  chatAPI
-}
+export { authAPI, chatAPI };

@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { Container } from '../../components/MainContainer'
-import { useChatContext } from '../../context/ChatContext'
-import RoomSelectList from './RoomSelectList'
-import RoomForm from './RoomForm'
-import { useAxios } from '../../hooks/useAxios'
-import { chatAPI } from '../../api'
-import { useAuthContext } from '../../context/AuthContext' 
-import { errorToast } from '../../utils/toastify'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Container } from '../../components/MainContainer';
+import { useChatContext } from '../../context/ChatContext';
+import RoomSelectList from './RoomSelectList';
+import RoomForm from './RoomForm';
+import { useAxios } from '../../hooks/useAxios';
+import { chatAPI } from '../../api';
+import { useAuthContext } from '../../context/AuthContext';
+import { errorToast } from '../../utils/toastify';
+import { useNavigate } from 'react-router-dom';
 
 function Room() {
-  const [ show, setShow ] = useState()
+  const [show, setShow] = useState();
 
-  const navigate = useNavigate()
-  const { user } = useAuthContext()
-  const { contactsWithOnlineStatus, fetchUserContacts, setChatInfo } = useChatContext()
-  const { error, isLoading, sendRequest: postCreateRoom } = useAxios()
+  const navigate = useNavigate();
+  const { user } = useAuthContext();
+  const { contactsWithOnlineStatus, fetchUserContacts, setChatInfo } = useChatContext();
+  const { error, isLoading, sendRequest: postCreateRoom } = useAxios();
 
-  const [ selected, setSelected ] = useState([])
+  const [selected, setSelected] = useState([]);
   const options = contactsWithOnlineStatus
-    .filter(contact => contact.chatType !== 'room')
-    .map(contact => ({ ...contact, isSelected: selected.includes(contact._id) }))
+    .filter((contact) => contact.chatType !== 'room')
+    .map((contact) => ({ ...contact, isSelected: selected.includes(contact._id) }));
 
   const handleSelected = (selectedId) => {
-    selected.includes(selectedId) 
-      ? setSelected(prev => prev.filter(id => id !== selectedId))
-      : setSelected(prev => ([...prev, selectedId]))
-  }
+    selected.includes(selectedId)
+      ? setSelected((prev) => prev.filter((id) => id !== selectedId))
+      : setSelected((prev) => [...prev, selectedId]);
+  };
 
   const handleRoomCreate = (formData) => {
     postCreateRoom(
@@ -41,41 +41,34 @@ function Room() {
         }
       },
       (data) => {
-        fetchUserContacts()
-        setChatInfo(data.data)
-        navigate('/')
+        fetchUserContacts();
+        setChatInfo(data.data);
+        navigate('/');
       }
-    )
-  }
+    );
+  };
 
   const toggleShow = () => {
-    setShow(prev => !prev)
-  }
+    setShow((prev) => !prev);
+  };
 
   useEffect(() => {
-    if (error) errorToast(error.message)
-  }, [error])
+    if (error) errorToast(error.message);
+  }, [error]);
 
   return (
     <Wrapper>
       <ChatContainer>
-        <RoomSelectList
-          handleSelected={handleSelected}
-          options={options} 
-          toggleShow={toggleShow}
-        />
+        <RoomSelectList handleSelected={handleSelected} options={options} toggleShow={toggleShow} />
       </ChatContainer>
       <RoomContainer className={show ? 'show' : null}>
-        <RoomForm 
-          handleRoomCreate={handleRoomCreate}
-          isLoading={isLoading}
-        />
+        <RoomForm handleRoomCreate={handleRoomCreate} isLoading={isLoading} />
       </RoomContainer>
     </Wrapper>
-  )
+  );
 }
 
-const Wrapper = styled.div `
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -83,21 +76,21 @@ const Wrapper = styled.div `
   @media screen and (min-width: 768px) {
     flex-direction: row;
   }
-`
+`;
 
-const ChatContainer = styled(Container) `
+const ChatContainer = styled(Container)`
   overflow: auto;
   height: calc(100vh - 80px);
   background-color: var(--bg-color-main);
   align-items: flex-start;
-  padding: 0 0 ;
+  padding: 0 0;
 
   @media screen and (min-width: 768px) {
     max-width: calc(480px + 2rem);
   }
-`
+`;
 
-const RoomContainer = styled(ChatContainer) `
+const RoomContainer = styled(ChatContainer)`
   padding: 0;
   position: absolute;
   top: 0;
@@ -118,6 +111,6 @@ const RoomContainer = styled(ChatContainer) `
     transition: none;
     max-width: 100%;
   }
-`
+`;
 
-export default Room
+export default Room;

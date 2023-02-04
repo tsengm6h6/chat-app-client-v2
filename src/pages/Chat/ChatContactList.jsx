@@ -1,79 +1,79 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import ListItem from './ChatListItem'
-import { useChatContext } from '../../context/ChatContext'
-import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import ListItem from './ChatListItem';
+import { useChatContext } from '../../context/ChatContext';
+import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 
 function ChatContactList() {
-  const { contactsWithOnlineStatus, handleChatSelect } = useChatContext()
-  const [ display, setDisplay ] = useState({
+  const { contactsWithOnlineStatus, handleChatSelect } = useChatContext();
+  const [display, setDisplay] = useState({
     rooms: true,
     users: true
-  })
+  });
 
-  const contactGroups = contactsWithOnlineStatus.reduce((prev, curr) => {
-      curr?.chatType === 'room' ? prev.rooms.push(curr) : prev.users.push(curr)
-      return prev
-    }, {
+  const contactGroups = contactsWithOnlineStatus.reduce(
+    (prev, curr) => {
+      curr?.chatType === 'room' ? prev.rooms.push(curr) : prev.users.push(curr);
+      return prev;
+    },
+    {
       rooms: [],
       users: []
-    })
+    }
+  );
 
   const handleToggleDisplay = (key) => {
-    setDisplay(prev => ({ ...prev, [key]: !display[key] }))
-  }
+    setDisplay((prev) => ({ ...prev, [key]: !display[key] }));
+  };
 
   const renderedGroups = Object.entries(contactGroups).map(([key, values]) => {
-    const renderedContacts = values.map(contact => {
-      const { _id, avatarImage, ...otherContact } = contact
+    const renderedContacts = values.map((contact) => {
+      const { _id, avatarImage, ...otherContact } = contact;
       return (
-        <ListItem 
+        <ListItem
           key={_id}
           contactId={_id}
           avatarImage={avatarImage ? `data:image/svg+xml;base64, ${avatarImage}` : '/user.png'}
           handleItemClick={(e) => handleChatSelect(contact)}
-          {...otherContact} />
-      )
-    })
+          {...otherContact}
+        />
+      );
+    });
 
     return (
       <ListGroup key={key}>
-        <GroupTitle onClick={() => handleToggleDisplay(key)} >
-          { key }
-          { display[key] ? <BiChevronDown /> : <BiChevronUp />}
+        <GroupTitle onClick={() => handleToggleDisplay(key)}>
+          {key}
+          {display[key] ? <BiChevronDown /> : <BiChevronUp />}
         </GroupTitle>
-        { display[key] ?  renderedContacts : null }
+        {display[key] ? renderedContacts : null}
       </ListGroup>
-    )
-  })
+    );
+  });
 
-  return (
-    <List>
-      {renderedGroups}
-    </List>
-  )
+  return <List>{renderedGroups}</List>;
 }
 
-const List = styled.div `
+const List = styled.div`
   width: 100%;
   max-width: 480px;
-`
+`;
 
-const ListGroup = styled.ul `
+const ListGroup = styled.ul`
   width: 100%;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
-const GroupTitle = styled.h3 `
+const GroupTitle = styled.h3`
   font-size: 1rem;
   color: var(--main-color);
   align-self: flex-start;
   margin-bottom: 4px;
   text-transform: capitalize;
   cursor: pointer;
-`
+`;
 
-export default ChatContactList
+export default ChatContactList;

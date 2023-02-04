@@ -1,44 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { HiOutlineSun, HiOutlineMoon, HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2'
-import { Link } from 'react-router-dom'
-import { MdGroupAdd } from 'react-icons/md'
-import { ThemeContext } from 'styled-components'
-import { useAuthContext } from '../context/AuthContext'
-import { useChatContext } from '../context/ChatContext'
-import { useNavigate } from 'react-router-dom'
-import { useSocketContext } from '../context/SocketContext'
-import { socketEmitEvent } from '../socket/emit'
-
+import React, { useContext, useEffect, useState } from 'react';
+import styled, { ThemeContext } from 'styled-components';
+import { HiOutlineSun, HiOutlineMoon, HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
+import { MdGroupAdd } from 'react-icons/md';
+import { useAuthContext } from '../context/AuthContext';
+import { useChatContext } from '../context/ChatContext';
+import { useSocketContext } from '../context/SocketContext';
+import { socketEmitEvent } from '../socket/emit';
 
 function Navbar() {
-  const { mode, setMode } = useContext(ThemeContext)
-  const { user, setUser } = useAuthContext() 
-  const { setChatInfo } = useChatContext() 
-  const navigate = useNavigate()
+  const { mode, setMode } = useContext(ThemeContext);
+  const { user, setUser } = useAuthContext();
+  const { setChatInfo } = useChatContext();
 
-  const { socketValue: { socket, socketId, onlineUsers }, resetSocketValue } = useSocketContext()
-  const [ show, setShow ] = useState(false)
+  const {
+    socketValue: { socket, socketId, onlineUsers },
+    resetSocketValue
+  } = useSocketContext();
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    console.log('socket id', socketId)
+    console.log('socket id', socketId);
     if (socketId) {
-      setShow(true) // TODO:
+      setShow(true); // TODO:
     }
-  }, [socketId])
+  }, [socketId]);
 
   const handleLogout = () => {
-    console.log('logout', socketEmitEvent(socket))
-    setUser(null)
+    console.log('logout', socketEmitEvent(socket));
+    setUser(null);
     // TODO: 登出先一律清空(localStorage 不紀錄上一次聊天對象)
-    setChatInfo(null)
+    setChatInfo(null);
     if (socketId) {
-      socketEmitEvent(socket).userOffline(user._id)
-      console.log('DISCONNECT')
-      resetSocketValue()
-      socket.disconnect()
+      socketEmitEvent(socket).userOffline(user._id);
+      console.log('DISCONNECT');
+      resetSocketValue();
+      socket.disconnect();
     }
-  }
+  };
 
   return (
     <NavContainer>
@@ -46,38 +45,40 @@ function Navbar() {
         <NavLogo>
           <NavImage src="/talking.png" alt="brand=logo" />
           <NavBrand>ChatBot</NavBrand>
-          { show && onlineUsers && <NavCount> 上線人數：{ onlineUsers.length || 0}</NavCount> }
+          {show && onlineUsers && <NavCount> 上線人數：{onlineUsers.length || 0}</NavCount>}
         </NavLogo>
       </Link>
-      { user ? <NavUser>Welcome! <span>{user.name}</span></NavUser> : null }
+      {user ? (
+        <NavUser>
+          Welcome! <span>{user.name}</span>
+        </NavUser>
+      ) : null}
       <NavIcons>
         <NavIcon>
-          { 
-            mode === 'light'
-            ? <HiOutlineSun onClick={() => setMode('dark')} />
-            : <HiOutlineMoon onClick={() => setMode('light')} />
-          }
+          {mode === 'light' ? (
+            <HiOutlineSun onClick={() => setMode('dark')} />
+          ) : (
+            <HiOutlineMoon onClick={() => setMode('light')} />
+          )}
         </NavIcon>
-        {
-          user ? (
-            <>
-              <NavIcon>
-                <Link to="/open-room">
-                  <MdGroupAdd />
-                </Link>
-              </NavIcon>
-              <NavIcon>
-                <HiOutlineArrowTopRightOnSquare onClick={handleLogout} />
-              </NavIcon>
-            </>
-          ) : null
-        }
+        {user ? (
+          <>
+            <NavIcon>
+              <Link to="/open-room">
+                <MdGroupAdd />
+              </Link>
+            </NavIcon>
+            <NavIcon>
+              <HiOutlineArrowTopRightOnSquare onClick={handleLogout} />
+            </NavIcon>
+          </>
+        ) : null}
       </NavIcons>
     </NavContainer>
-  )
+  );
 }
 
-const NavContainer = styled.nav `
+const NavContainer = styled.nav`
   height: 80px;
   padding: 1rem 2rem;
   display: flex;
@@ -91,34 +92,34 @@ const NavContainer = styled.nav `
     color: var(--main-color);
     text-decoration: none;
   }
-`
+`;
 
-const NavLogo = styled.div `
+const NavLogo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-`
+`;
 
-const NavImage = styled.img `
+const NavImage = styled.img`
   display: block;
   width: 40px;
   height: 40px;
   object-fit: cover;
-`
+`;
 
-const NavBrand = styled.h1 `
+const NavBrand = styled.h1`
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
-`
+`;
 
-const NavCount = styled.p `
+const NavCount = styled.p`
   font-size: 0.8rem;
   margin-left: 0.5rem;
-`
+`;
 
-const NavUser = styled.h2 `
+const NavUser = styled.h2`
   flex: 1;
   font-size: 1rem;
   text-align: end;
@@ -126,7 +127,7 @@ const NavUser = styled.h2 `
   padding: 0 1rem;
   text-transform: capitalize;
   display: none;
-  
+
   span {
     font-style: italic;
   }
@@ -134,14 +135,14 @@ const NavUser = styled.h2 `
   @media screen and (min-width: 768px) {
     display: block;
   }
-`
+`;
 
-const NavIcons = styled.div `
+const NavIcons = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
-const NavIcon = styled.div `
+const NavIcon = styled.div`
   width: 40px;
   height: 40px;
   margin: 4px;
@@ -159,7 +160,7 @@ const NavIcon = styled.div `
     position: relative;
     bottom: 1px;
   }
-  
+
   a {
     display: flex;
     color: var(--main-color);
@@ -168,6 +169,6 @@ const NavIcon = styled.div `
   :not(:last-child) {
     margin-right: 0.5rem;
   }
-`
+`;
 
-export default Navbar
+export default Navbar;

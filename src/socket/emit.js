@@ -1,27 +1,27 @@
 export const socketEmitEvent = (socket) => {
   return {
     userOnline: (userId, socketId) => {
-      socket.emit('USER_ONLINE', userId, socketId)
+      socket.emit('USER_ONLINE', userId, socketId);
     },
     userOffline: (userId) => {
-      socket.emit('USER_OFFLINE', userId)
+      socket.emit('USER_OFFLINE', userId);
     },
     sendMessage: (messageData) => {
       // type, message, senderId, receiverId
-      console.log('=== socket 送出訊息 ===')
-      console.log('send message emit', messageData)
-      socket.emit('SEND_MESSAGE', messageData)
+      console.log('=== socket 送出訊息 ===');
+      console.log('send message emit', messageData);
+      socket.emit('SEND_MESSAGE', messageData);
     },
     updateMessageStatus: (updatedData) => {
-      console.log('socket 告知對方「自己」已讀', updatedData)
-      socket.emit('UPDATE_MESSAGE_STATUS', updatedData)
+      console.log('socket 告知對方「自己」已讀', updatedData);
+      socket.emit('UPDATE_MESSAGE_STATUS', updatedData);
     },
     userTyping: (typingNotify) => {
-      console.log('=== user typing ===', typingNotify)
-      socket.emit('USER_TYPING', typingNotify)
+      console.log('=== user typing ===', typingNotify);
+      socket.emit('USER_TYPING', typingNotify);
     },
     enterChatRoom: () => {},
     leaveChatRoom: () => {},
-    roomCreated: () => {},
-  }
-}
+    roomCreated: () => {}
+  };
+};

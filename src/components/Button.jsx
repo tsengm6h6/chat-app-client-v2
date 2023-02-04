@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-const StyledButton = styled.button `
+const StyledButton = styled.button`
   width: 80%;
   min-width: 150px;
   padding: 1rem;
@@ -12,26 +12,30 @@ const StyledButton = styled.button `
   background-color: var(--bg-color-main);
   color: var(--secondary);
   border: 2px solid var(--secondary);
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  filter: ${props => props.disabled ? 'grayscale(10%) saturate(80%) brightness(1.3)' : null };
-`
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  filter: ${(props) => (props.disabled ? 'grayscale(10%) saturate(80%) brightness(1.3)' : null)};
+`;
 
-const StyledPrimaryButton = styled(StyledButton) `
+const StyledPrimaryButton = styled(StyledButton)`
   background-color: var(--secondary);
   color: var(--bg-color-main);
   border-color: transparent;
-`
+`;
 
 function Button(props) {
-  return (
-    <StyledButton {...props}>{props.children}</StyledButton>
-  )
+  return <StyledButton {...props}>{props.children}</StyledButton>;
 }
 
 function PrimaryButton(props) {
-  return (
-    <StyledPrimaryButton {...props}>{props.children}</StyledPrimaryButton>
-  )
+  return <StyledPrimaryButton {...props}>{props.children}</StyledPrimaryButton>;
 }
 
-export { Button, PrimaryButton }
+Button.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+PrimaryButton.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+export { Button, PrimaryButton };

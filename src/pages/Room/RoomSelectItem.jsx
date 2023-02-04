@@ -1,23 +1,31 @@
-import React from 'react'
-import styled from 'styled-components'
-import Avatar from '../../components/Avatar'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Avatar from '../../components/Avatar';
 
 function RoomSelectItem(props) {
-  const { selected, avatarImage, name, isOnline, handleItemClick } = props
+  const { selected, avatarImage, name, isOnline, handleItemClick } = props;
 
   return (
     <ListItem onClick={handleItemClick} selected={selected}>
       <ListContent>
         <AvatarBox>
-          <Avatar onlineStyle={ isOnline ? 'dotted' : null } src={ avatarImage } alt="avatar" />
+          <Avatar onlineStyle={isOnline ? 'dotted' : null} src={avatarImage} alt="avatar" />
         </AvatarBox>
-        <ContentTitle selected={selected}>{ name }</ContentTitle>
+        <ContentTitle selected={selected}>{name}</ContentTitle>
       </ListContent>
     </ListItem>
-  )
+  );
 }
 
-const ListItem = styled.li `
+RoomSelectItem.propTypes = {
+  selected: PropTypes.bool.isRequired,
+  avatarImage: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  isOnline: PropTypes.bool.isRequired,
+  handleItemClick: PropTypes.func.isRequired
+};
+
+const ListItem = styled.li`
   width: 100%;
   min-width: none;
   max-width: 480px;
@@ -28,39 +36,41 @@ const ListItem = styled.li `
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  background-color: ${props => props.selected ? 'var(--primary)' : 'var(--bg-color-darken)'};
+  background-color: ${(props) => (props.selected ? 'var(--primary)' : 'var(--bg-color-darken)')};
   border-radius: 8px;
-  box-shadow: ${props => props.selected ? 'inset -1px -1px 4px var(--shadow-color-primary)' : '2px 2px 4px var(--shadow-color)'};
+  box-shadow: ${(props) =>
+    props.selected ? 'inset -1px -1px 4px var(--shadow-color-primary)' : '2px 2px 4px var(--shadow-color)'};
   cursor: pointer;
   position: relative;
 
   &:hover {
-    box-shadow: ${props => props.selected ? 'inset -2px -2px 4px var(--shadow-color-primary)' : '2px 2px 4px var(--shadow-color)'};
+    box-shadow: ${(props) =>
+      props.selected ? 'inset -2px -2px 4px var(--shadow-color-primary)' : '2px 2px 4px var(--shadow-color)'};
   }
 
   &:active {
     bottom: -1px;
   }
-`
+`;
 
-const ListContent = styled.div `
+const ListContent = styled.div`
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-`
+`;
 
-const AvatarBox = styled.div `
+const AvatarBox = styled.div`
   justify-self: flex-end;
-`
+`;
 
-const ContentTitle = styled.h2 `
+const ContentTitle = styled.h2`
   font-size: 1.25em;
   font-weight: 600;
   margin-bottom: 4px;
-  color: ${props => props.selected ? 'var(--bg-color-main)' : 'var(--main-color)'};
+  color: ${(props) => (props.selected ? 'var(--bg-color-main)' : 'var(--main-color)')};
   justify-self: flex-start;
   align-self: center;
-`
+`;
 
-export default RoomSelectItem
+export default RoomSelectItem;

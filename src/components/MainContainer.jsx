@@ -1,16 +1,15 @@
-import React from 'react'
-import styled from 'styled-components'
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 function MainContainer({ children }) {
-  return (
-    <Container>
-      { children }
-    </Container>
-  )
+  return <Container>{children}</Container>;
 }
 
+MainContainer.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
-export const Container = styled.div `
+export const Container = styled.div`
   width: 100%;
   min-height: calc(100vh - 80px);
   padding: 2rem 0 3rem;
@@ -18,6 +17,6 @@ export const Container = styled.div `
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
-export default MainContainer
+export default MainContainer;
