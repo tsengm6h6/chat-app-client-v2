@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import ChatRoomHeader from './ChatRoomHeader';
 import ChatRoomMessage from './ChatRoomMessage';
@@ -8,14 +8,15 @@ import { useAuthContext } from '../../context/AuthContext';
 import { useSocketContext } from '../../context/SocketContext';
 import { chatAPI } from '../../api';
 import { useAxios } from '../../hooks/useAxios';
+import { defaultToast } from '../../utils/toastify';
 
 function ChatRoom() {
   const { user } = useAuthContext();
   const { chatId, chatInfo, updateMessageStatusToRead } = useChatContext();
   const { isLoading: messageLoading, sendRequest: getUserMessages } = useAxios();
   const {
-    socketValue: { messageData, messageReadStatus },
-    setSocketValue
+    socketValue: { messageData, messageReadStatus, roomNotify },
+    resetSocketValue
   } = useSocketContext();
 
   const [chatMessages, setChatMessages] = useState([]);
@@ -38,48 +39,71 @@ function ChatRoom() {
     }
   }, [chatId, getUserMessages, user._id, chatInfo]);
 
+  const checkIsChatting = useCallback(
+    (messageData) => {
+      // 檢查是否在對話中
+      const { type, sender, receiver } = messageData;
+      return type === 'user' ? chatId === sender : chatId === receiver;
+    },
+    [chatId]
+  );
+
+  const updateSelfMessageStatus = useCallback(
+    (messageData) => {
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          ...messageData,
+          readers: [user._id]
+        }
+      ]);
+    },
+    [user]
+  );
+
   // socket 收到訊息 -> 更新對話訊息狀態
   useEffect(() => {
     if (messageData) {
       console.log('=== socket 收到訊息 ===', messageData);
       // 檢查是否在對話中
-      const { type, sender, receiver } = messageData;
-      const isChatting = type === 'user' ? chatId === sender : chatId === receiver;
+      const isChatting = checkIsChatting(messageData);
       // 是，更新訊息狀態「被自己」已讀
       if (isChatting) {
-        const messageDataExisted = chatMessages.findIndex(({ _id }) => _id === messageData._id) > -1;
-        if (!messageDataExisted) {
-          setChatMessages((prev) => [
-            ...prev,
-            {
-              ...messageData,
-              readers: [user._id]
-            }
-          ]);
-          // 更新 API & socket 已讀狀態
-          updateMessageStatusToRead(chatId, chatInfo.chatType);
-        }
+        // 更新自己
+        updateSelfMessageStatus(messageData);
+        // 更新 API & 對方
+        updateMessageStatusToRead(chatInfo.id, chatInfo.chatType);
       }
       // RESET
-      setSocketValue((prev) => ({ ...prev, messageData: null }));
+      resetSocketValue('messageData');
     }
-  }, [messageData, user, chatId, chatMessages, chatInfo, updateMessageStatusToRead, setSocketValue]);
+  }, [messageData, checkIsChatting, updateSelfMessageStatus, updateMessageStatusToRead, chatInfo, resetSocketValue]);
 
   // socket 收到 message update status 通知
   useEffect(() => {
     if (messageReadStatus) {
-      const { type, readerId } = messageReadStatus;
+      const { type, readerId, toId: receiveRoomId } = messageReadStatus;
       // 檢查已讀者是否正在對話中
-      const isChatting = type === 'user' && readerId === chatId; // TODO: 聊天室待處理
+      const isChatting = type === 'user' ? chatId === readerId : chatId === receiveRoomId;
+      // TODO: 聊天室 -> 只有同一聊天室會收到訊息
       // const updateUnread = type === 'user' ? (readerId && readerId === chatTarget?._id) : true
       if (isChatting) {
-        console.log('*** set chat message read status ***');
+        console.log('*** set chat message read status ***', messageReadStatus);
         setChatMessages((prev) =>
           prev.map((msg) => (msg.sender !== readerId ? { ...msg, readers: [...msg.readers, readerId] } : msg))
         );
       }
     }
   }, [messageReadStatus, chatId]);
+
+  useEffect(() => {
+    if (roomNotify && chatInfo?.chatType === 'room') {
+      defaultToast(roomNotify);
+    }
+    return () => {
+      resetSocketValue('roomNotify');
+    };
+  }, [roomNotify, chatInfo, resetSocketValue]);
 
   return (
     <RoomWrapper>

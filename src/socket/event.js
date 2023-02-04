@@ -24,7 +24,7 @@ export const socketListenEvent = (socket, { setSocketValue }) => {
 
   // message has been read
   socket.on('MESSAGE_READ', (messageReadStatus) => {
-    console.log('=== socket 收到「對方」已讀通知 ===', messageReadStatus);
+    console.log('=== socket 收到「對方」已讀通知 ===', messageReadStatus, '** message **');
     setSocketValue((prev) => ({
       ...prev,
       messageReadStatus
@@ -41,7 +41,13 @@ export const socketListenEvent = (socket, { setSocketValue }) => {
   });
 
   // someone enter / leave chat room
-  socket.on('CHAT_ROOM_NOTIFY', () => {});
+  socket.on('CHAT_ROOM_NOTIFY', ({ message }) => {
+    console.log('room notify', message);
+    setSocketValue((prev) => ({
+      ...prev,
+      roomNotify: message
+    }));
+  });
 
   // someone invited user to room
   socket.on('INVITED_TO_ROOM', () => {});

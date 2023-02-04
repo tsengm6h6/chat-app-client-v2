@@ -20,7 +20,6 @@ function Navbar() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    console.log('socket id', socketId);
     if (socketId) {
       setShow(true); // TODO:
     }
@@ -45,6 +44,7 @@ function Navbar() {
         <NavLogo>
           <NavImage src="/talking.png" alt="brand=logo" />
           <NavBrand>ChatBot</NavBrand>
+          {show && socketId}
           {show && onlineUsers && <NavCount> 上線人數：{onlineUsers.length || 0}</NavCount>}
         </NavLogo>
       </Link>

@@ -3,10 +3,12 @@ import { forwardRef, useRef, useImperativeHandle } from 'react';
 import styled from 'styled-components';
 import Avatar from '../../components/Avatar';
 import { useAuthContext } from '../../context/AuthContext';
+import { useChatContext } from '../../context/ChatContext';
 import { timeFormatter } from '../../utils/timeFormatter';
 
 const ChatMessage = forwardRef(function ChatMessage({ sender, avatarImage, _id, message, updatedAt, readers }, ref) {
   const { user } = useAuthContext();
+  const { chatInfo } = useChatContext();
   const messageRef = useRef(null);
 
   useImperativeHandle(
@@ -24,13 +26,14 @@ const ChatMessage = forwardRef(function ChatMessage({ sender, avatarImage, _id, 
   );
 
   const fromSelf = user._id === sender;
+  const isRoom = chatInfo.chatType === 'room';
 
   return (
     <Message className={fromSelf ? 'self' : null} ref={messageRef}>
       <Avatar size="medium" src={`data:image/svg+xml;base64,${avatarImage}`} />
       <Text className={fromSelf ? 'self' : null}>{message}</Text>
       <MessageDetail>
-        {readers.length > 0 && fromSelf && <Status>Read</Status>}
+        {readers.length > 0 && fromSelf && <Status>{isRoom ? readers.length : 'Read'}</Status>}
         <Time>{timeFormatter(updatedAt)}</Time>
       </MessageDetail>
     </Message>

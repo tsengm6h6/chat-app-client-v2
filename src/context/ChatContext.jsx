@@ -29,29 +29,29 @@ function ChatContextProvider({ children }) {
   }));
 
   const fetchUserContacts = useCallback(() => {
-    return getUserContacts(
-      {
-        method: 'GET',
-        url: chatAPI.getUserContacts(user._id)
-      },
-      (data) => {
-        setContacts(data.data);
-      }
-    );
+    if (user) {
+      return getUserContacts(
+        {
+          method: 'GET',
+          url: chatAPI.getUserContacts(user._id)
+        },
+        (data) => {
+          setContacts(data.data);
+        }
+      );
+    }
   }, [user, getUserContacts]);
 
   // fetch user contacts
   useEffect(() => {
-    if (user) {
-      fetchUserContacts();
-    }
-  }, [user, fetchUserContacts]);
+    fetchUserContacts();
+  }, [fetchUserContacts]);
 
   // 更新最新訊息
   const updateContactLatestMessage = useCallback(
     (latestMessageData) => {
       const { updateId, sender, message, updatedAt, unreadCount } = latestMessageData;
-      console.log('== updateContactLatestMessage ==', latestMessageData);
+
       setContacts((prevContact) =>
         prevContact.map((contact) => {
           return contact._id === updateId
@@ -72,7 +72,6 @@ function ChatContextProvider({ children }) {
   // 有新訊息時，更新 contact 最新訊息
   useEffect(() => {
     if (messageData) {
-      console.log('== chat context get msg ==', messageData);
       updateContactLatestMessage({ ...messageData, updateId: messageData.sender });
     }
   }, [messageData, updateContactLatestMessage]);
@@ -89,17 +88,29 @@ function ChatContextProvider({ children }) {
       })
     });
     // socket 告知對方「自己」已讀
-    socketEmitEvent(socket).updateMessageStatus({
+    // socketEmitEvent(socket).updateMessageStatus({
+    //   readerId: user._id,
+    //   messageSender: chatId,
+    //   type
+    // });
+    // TODO:
+    socketEmitEvent(socket).updateMessageReaders({
       readerId: user._id,
-      messageSender: chatId,
+      toId: chatId,
       type
     });
   };
 
   const handleChatSelect = async (selected) => {
     if (selected._id !== chatId) {
+      if (selected.chatType === 'room') {
+        socketEmitEvent(socket).enterChatRoom({ roomId: selected._id, message: `${user.name} 已加入聊天` });
+      }
+      if (chatInfo?.chatType === 'room') {
+        socketEmitEvent(socket).leaveChatRoom({ roomId: chatId, message: `${user.name} 已離開聊天` });
+      }
       setChatInfo(selected);
-      updateMessageStatusToRead(selected._id, selected.chatType);
+      // updateMessageStatusToRead(selected._id, selected.chatType);
       setContacts((prevContacts) =>
         prevContacts.map((prev) => (prev._id === selected._id ? { ...prev, unreadCount: 0 } : prev))
       );
