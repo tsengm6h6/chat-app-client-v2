@@ -9,7 +9,6 @@ function ChatRoomHeader() {
   const roomUsersId = chatInfo?.users || [];
   const multipleAvatar = roomUsersId.map((userId) => {
     const user = contactsWithOnlineStatus?.find((contact) => contact._id === userId);
-    console.log('userId', userId, user);
     return user ? (
       <MultiAvatar
         key={user._id}

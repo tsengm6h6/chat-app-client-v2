@@ -33,7 +33,7 @@ const ChatMessage = forwardRef(function ChatMessage({ sender, avatarImage, _id, 
       <Avatar size="medium" src={`data:image/svg+xml;base64,${avatarImage}`} />
       <Text className={fromSelf ? 'self' : null}>{message}</Text>
       <MessageDetail>
-        {readers.length > 0 && fromSelf && <Status>{isRoom ? readers.length : 'Read'}</Status>}
+        {readers.length > 0 && fromSelf && <Status>Read {isRoom && readers.length}</Status>}
         <Time>{timeFormatter(updatedAt)}</Time>
       </MessageDetail>
     </Message>

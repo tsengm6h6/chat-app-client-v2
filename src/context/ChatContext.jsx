@@ -72,7 +72,8 @@ function ChatContextProvider({ children }) {
   // 有新訊息時，更新 contact 最新訊息
   useEffect(() => {
     if (messageData) {
-      updateContactLatestMessage({ ...messageData, updateId: messageData.sender });
+      const { type, receiver, sender } = messageData;
+      updateContactLatestMessage({ ...messageData, updateId: type === 'room' ? receiver : sender });
     }
   }, [messageData, updateContactLatestMessage]);
 
@@ -110,7 +111,7 @@ function ChatContextProvider({ children }) {
         socketEmitEvent(socket).leaveChatRoom({ roomId: chatId, message: `${user.name} 已離開聊天` });
       }
       setChatInfo(selected);
-      // updateMessageStatusToRead(selected._id, selected.chatType);
+      updateMessageStatusToRead(selected._id, selected.chatType);
       setContacts((prevContacts) =>
         prevContacts.map((prev) => (prev._id === selected._id ? { ...prev, unreadCount: 0 } : prev))
       );

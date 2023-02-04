@@ -71,12 +71,14 @@ function ChatRoom() {
         // 更新自己
         updateSelfMessageStatus(messageData);
         // 更新 API & 對方
-        updateMessageStatusToRead(chatInfo.id, chatInfo.chatType);
+        const { receiver, sender, type } = messageData;
+        const toId = type === 'room' ? receiver : sender;
+        updateMessageStatusToRead(toId, type);
       }
       // RESET
       resetSocketValue('messageData');
     }
-  }, [messageData, checkIsChatting, updateSelfMessageStatus, updateMessageStatusToRead, chatInfo, resetSocketValue]);
+  }, [messageData, checkIsChatting, updateSelfMessageStatus, updateMessageStatusToRead, resetSocketValue]);
 
   // socket 收到 message update status 通知
   useEffect(() => {
@@ -84,8 +86,6 @@ function ChatRoom() {
       const { type, readerId, toId: receiveRoomId } = messageReadStatus;
       // 檢查已讀者是否正在對話中
       const isChatting = type === 'user' ? chatId === readerId : chatId === receiveRoomId;
-      // TODO: 聊天室 -> 只有同一聊天室會收到訊息
-      // const updateUnread = type === 'user' ? (readerId && readerId === chatTarget?._id) : true
       if (isChatting) {
         console.log('*** set chat message read status ***', messageReadStatus);
         setChatMessages((prev) =>
