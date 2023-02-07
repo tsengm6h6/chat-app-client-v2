@@ -42,7 +42,7 @@ function Navbar() {
       <Link to="/">
         <NavLogo>
           <NavImage src="/talking.png" alt="brand=logo" />
-          <NavBrand>ChatBot</NavBrand>
+          <NavBrand>Chatty</NavBrand>
           {show && onlineUsers && <NavCount> 上線人數：{onlineUsers.length || 0}</NavCount>}
         </NavLogo>
       </Link>
@@ -78,7 +78,7 @@ function Navbar() {
 
 const NavContainer = styled.nav`
   height: 80px;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -89,6 +89,10 @@ const NavContainer = styled.nav`
   a {
     color: var(--main-color);
     text-decoration: none;
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 1rem 2rem;
   }
 `;
 
@@ -110,6 +114,11 @@ const NavBrand = styled.h1`
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
 `;
 
 const NavCount = styled.p`

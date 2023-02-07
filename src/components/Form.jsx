@@ -12,7 +12,7 @@ Form.propTypes = {
 
 const FormWidget = styled.form`
   width: 80%;
-  min-width: 350px;
+  min-width: 280px;
   max-width: 500px;
   background-color: var(--bg-color-main);
   padding: 3.5rem 1rem;
