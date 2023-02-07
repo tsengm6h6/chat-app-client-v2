@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
-import MainContainer from '../../components/MainContainer';
+import { OuterContainer, Container } from '../../components/MainContainer';
 import Form from '../../components/Form';
 import AvatarUploader from '../../components/AvatarUploader';
 import { Button, PrimaryButton } from '../../components/Button';
@@ -45,40 +45,42 @@ function RoomForm({ handleRoomCreate, isLoading, toggleShow }) {
   }, [generateAvatar]);
 
   return (
-    <MainContainer>
-      <Form onSubmit={(e) => handleFormSubmit(e)}>
-        <FormTitle>Enter Room Details</FormTitle>
-        <TextInput
-          type="text"
-          placeholder="Room Name"
-          name="roomname"
-          id="roomname"
-          value={formData.roomname}
-          onChange={(e) => setFormData((prev) => ({ ...prev, roomname: e.target.value }))}
-        />
-        <AvatarUploader
-          error={avatarError}
-          isLoading={avatarLoading}
-          avatar={formData.avatarImage}
-          onGenerate={handleGenerate}
-        />
-        <PrimaryButton>{isLoading ? 'Loading...' : 'Confirm'}</PrimaryButton>
-        <DisplayControl>
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              toggleShow();
-            }}
-          >
-            <IconWrapper>
-              <IoArrowUndo />
-            </IconWrapper>
-            Back
-          </Button>
-        </DisplayControl>
-      </Form>
-    </MainContainer>
+    <OuterContainer>
+      <FormContainer>
+        <Form onSubmit={(e) => handleFormSubmit(e)}>
+          <FormTitle>Enter Room Details</FormTitle>
+          <TextInput
+            type="text"
+            placeholder="Room Name"
+            name="roomname"
+            id="roomname"
+            value={formData.roomname}
+            onChange={(e) => setFormData((prev) => ({ ...prev, roomname: e.target.value }))}
+          />
+          <AvatarUploader
+            error={avatarError}
+            isLoading={avatarLoading}
+            avatar={formData.avatarImage}
+            onGenerate={handleGenerate}
+          />
+          <PrimaryButton>{isLoading ? 'Loading...' : 'Confirm'}</PrimaryButton>
+          <DisplayControl>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                toggleShow();
+              }}
+            >
+              <IconWrapper>
+                <IoArrowUndo />
+              </IconWrapper>
+              Back
+            </Button>
+          </DisplayControl>
+        </Form>
+      </FormContainer>
+    </OuterContainer>
   );
 }
 
@@ -87,6 +89,16 @@ RoomForm.propTypes = {
   isLoading: PropTypes.bool,
   toggleShow: PropTypes.func
 };
+
+const FormContainer = styled(Container)`
+  height: 100%;
+
+  @media screen and (min-width: 768px) {
+    padding-top: calc(40px + 28px + 16px);
+    display: flex;
+    align-items: flex-start;
+  }
+`;
 
 const FormTitle = styled.h1`
   font-size: 1.25rem;

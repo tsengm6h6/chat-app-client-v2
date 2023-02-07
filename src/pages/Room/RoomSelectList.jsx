@@ -48,6 +48,11 @@ const SelectContainer = styled.div`
   max-width: 480px;
   display: grid;
   grid-template-rows: repeat(1fr, 1fr, 1fr);
+
+  @media screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const GroupTitle = styled.h3`
@@ -57,6 +62,10 @@ const GroupTitle = styled.h3`
   font-size: 1.25rem;
   color: var(--main-color);
   text-transform: capitalize;
+
+  @media screen and (min-width: 768px) {
+    align-self: flex-start;
+  }
 `;
 
 const List = styled.div`

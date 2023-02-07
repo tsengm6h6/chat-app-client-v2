@@ -67,16 +67,22 @@ function Room() {
   }, [error]);
 
   return (
-    <Wrapper>
-      <ChatContainer>
-        <RoomSelectList handleSelected={handleSelected} options={options} toggleShow={toggleShow} />
-      </ChatContainer>
-      <RoomContainer className={show ? 'show' : null}>
-        <RoomForm handleRoomCreate={handleRoomCreate} isLoading={isLoading} toggleShow={toggleShow} />
-      </RoomContainer>
-    </Wrapper>
+    <OuterWrapper>
+      <Wrapper>
+        <ChatContainer>
+          <RoomSelectList handleSelected={handleSelected} options={options} toggleShow={toggleShow} />
+        </ChatContainer>
+        <RoomContainer className={show ? 'show' : null}>
+          <RoomForm handleRoomCreate={handleRoomCreate} isLoading={isLoading} toggleShow={toggleShow} />
+        </RoomContainer>
+      </Wrapper>
+    </OuterWrapper>
   );
 }
+
+const OuterWrapper = styled.div`
+  overflow: hidden;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -89,7 +95,6 @@ const Wrapper = styled.div`
 `;
 
 const ChatContainer = styled(Container)`
-  overflow: hidden;
   height: calc(100vh - 80px);
   background-color: var(--bg-color-main);
   align-items: flex-start;

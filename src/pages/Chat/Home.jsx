@@ -33,16 +33,22 @@ function Home() {
   }, [roomNotify, chatInfo, resetSocketValue]);
 
   return (
-    <Wrapper>
-      <ChatContainer>
-        <ChatContactList />
-      </ChatContainer>
-      <RoomContainer className={chatId ? 'show' : null}>
-        <ChatRoom key={chatId} />
-      </RoomContainer>
-    </Wrapper>
+    <OuterWrapper>
+      <Wrapper>
+        <ChatContainer>
+          <ChatContactList />
+        </ChatContainer>
+        <RoomContainer className={chatId ? 'show' : null}>
+          <ChatRoom key={chatId} />
+        </RoomContainer>
+      </Wrapper>
+    </OuterWrapper>
   );
 }
+
+const OuterWrapper = styled.div`
+  overflow: hidden;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -55,7 +61,6 @@ const Wrapper = styled.div`
 `;
 
 const ChatContainer = styled(Container)`
-  overflow: auto;
   height: calc(100vh - 80px);
   background-color: var(--bg-color-main);
   align-items: flex-start;
