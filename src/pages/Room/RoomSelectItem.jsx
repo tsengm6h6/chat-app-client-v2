@@ -57,7 +57,7 @@ const ListItem = styled.li`
 const ListContent = styled.div`
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 2fr 4fr;
   gap: 1rem;
 `;
 
