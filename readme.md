@@ -28,33 +28,38 @@ https://sweet-bombolone-176d6a.netlify.app
 ### Screenshots
 **Chat (Light mode)**
 ![Imgur](https://i.imgur.com/VYt9Bbf.png)
+
 **Chat (Dark mode)**
 ![Imgur](https://i.imgur.com/Kvzk6A2.png)
+
 **Chat (Mobile)**
 ![Imgur](https://i.imgur.com/f08biHB.png)
 
 **Create Room (Light mode)**
 ![Imgur](https://i.imgur.com/tVioSqs.png)
+
 **Create Room (Dark mode)**
 ![Imgur](https://i.imgur.com/LNq1G4m.png)
+
 **Create Room (Mobile)**
 ![Imgur](https://i.imgur.com/gK4azXw.png)
 
 ### How to use
-1. clone the repo
-  ```
-  git clone https://github.com/tsengm6h6/chat-app-client-v2.git
-  ```
-2. enter the directory
-  ```
-  cd chat-app-client-v2
-  ```
-3. install dependencies
-  ```
-  yarn install
-  ```
-4. run the app (please make sure the server for this app is running before step 4, [check here](https://github.com/tsengm6h6/chat-app-server) to setup for the server)
-  ```
-  yarn dev
-  ```
- the app will be automatically opened in your web browser and you can try it out.
+1. Clone the repo
+    ```
+    git clone https://github.com/tsengm6h6/chat-app-client-v2.git
+    ```
+2. Enter the directory
+    ```
+    cd chat-app-client-v2
+    ```
+3. Install dependencies
+    ```
+    yarn install
+    ```
+4. Run the app   
+-> Please make sure the server for this app is running before step 4, [check here](https://github.com/tsengm6h6/chat-app-server) to setup for the server.
+    ```
+    yarn dev
+    ```
+    The app will be automatically opened in your web browser and you can try it out.
