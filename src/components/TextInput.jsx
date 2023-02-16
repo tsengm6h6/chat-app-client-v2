@@ -5,7 +5,7 @@ function TextInput(props) {
   const { label, id, ...otherProps } = props;
   return (
     <>
-      {label ? <StyledLabel for={id}>{label}</StyledLabel> : null}
+      {label ? <StyledLabel htmlFor={id}>{label}</StyledLabel> : null}
       <StyledInput {...otherProps} />
     </>
   );

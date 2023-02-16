@@ -10,7 +10,7 @@ import { socketEmitEvent } from '../socket/emit';
 
 function Navbar() {
   const { mode, setMode } = useContext(ThemeContext);
-  const { user, setUser } = useAuthContext();
+  const { user, setUser, setToken } = useAuthContext();
   const { setChatInfo } = useChatContext();
 
   const {
@@ -28,6 +28,7 @@ function Navbar() {
   const handleLogout = () => {
     console.log('logout', socketEmitEvent(socket));
     setUser(null);
+    setToken(null);
     setChatInfo(null);
     if (socketId) {
       socketEmitEvent(socket).userOffline(user._id);

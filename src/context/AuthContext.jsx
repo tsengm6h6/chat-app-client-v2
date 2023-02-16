@@ -8,8 +8,9 @@ export const useAuthContext = () => useContext(AuthContext);
 
 export default function AuthContextProvider({ children }) {
   const [user, setUser] = useLocalStorage('chat-app-user', null);
+  const [token, setToken] = useLocalStorage('chat-app-token', null);
 
-  return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, setUser, token, setToken }}>{children}</AuthContext.Provider>;
 }
 
 AuthContextProvider.propTypes = {

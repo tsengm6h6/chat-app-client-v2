@@ -16,12 +16,16 @@ function LoginForm() {
     password: ''
   });
 
-  const { setUser } = useAuthContext();
+  const { setUser, setToken } = useAuthContext();
   const { socketConnect } = useSocketContext();
   const { error, isLoading, sendRequest: postLogin } = useAxios();
 
   useEffect(() => {
-    if (error) errorToast(error.message);
+    if (error) {
+      error.errors.forEach((e) => {
+        errorToast(e.msg);
+      });
+    }
   }, [error]);
 
   const handleSubmit = (e) => {
@@ -37,7 +41,9 @@ function LoginForm() {
         data: { ...formData }
       },
       (data) => {
-        setUser(data.data);
+        const { accessToken, ...other } = data.data;
+        setUser({ ...other });
+        setToken({ accessToken });
         socketConnect();
       }
     );

@@ -19,13 +19,17 @@ function SignUpForm() {
     confirmPassword: '',
     avatarImage: ''
   });
-  const { setUser } = useAuthContext();
+  const { setUser, setToken } = useAuthContext();
 
   const { error: submitError, isLoading: submitLoading, sendRequest: postRegister } = useAxios();
   const { error: avatarError, isLoading: avatarLoading, sendRequest: fetchRandomAvatar } = useAxios();
 
   useEffect(() => {
-    if (submitError) errorToast(submitError.message);
+    if (submitError) {
+      submitError.errors.forEach((e) => {
+        errorToast(e.msg);
+      });
+    }
   }, [submitError]);
 
   const generateAvatar = useCallback(() => {
@@ -63,7 +67,9 @@ function SignUpForm() {
           data: { ...formData }
         },
         (data) => {
-          setUser(data.data);
+          const { accessToken, ...other } = data.data;
+          setUser({ ...other });
+          setToken({ accessToken });
         }
       );
     }
