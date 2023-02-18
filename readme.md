@@ -6,9 +6,9 @@ You can find the backend repo [here](https://github.com/tsengm6h6/chat-app-serve
 
 ### Feature
 - Authentication
-- One on one **Private Chat** that users can chat with others privately.
-- Create a room and start a **Room Chat** for users who wants to broadcast messages to specific group of users.
-- Real-time updates to conversation messages, user online/ offline, read/ unread status, user join/leave room notify, etc.
+- One-on-one **Private Chat** where users can chat with others privately.
+- Create a room and start a **Room Chat** for users who want to broadcast messages to a specific group of users.
+- Real-time updates to conversation messages, user online/ offline, read/ unread status, user join/leave room to notify, etc.
 - Support both RWD and different themes with light and dark mode
 
 ### Technologies
@@ -24,6 +24,13 @@ You can find the backend repo [here](https://github.com/tsengm6h6/chat-app-serve
 
 ### Live Demo
 https://sweet-bombolone-176d6a.netlify.app
+
+### Testing Account
+username: Lenny Connolly
+password: 12345678
+
+username: Rachael Holloway
+password: 12345678
 
 ### Screenshots
 **Chat (Light mode)**
