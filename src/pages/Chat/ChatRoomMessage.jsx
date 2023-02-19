@@ -56,7 +56,7 @@ const RoomEmptyMessage = styled.div`
   background-color: var(--bg-color-main);
   color: var(--primary);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
 `;
 
 const RoomWelcomeMessage = styled(RoomEmptyMessage)`

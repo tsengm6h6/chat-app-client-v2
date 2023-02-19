@@ -67,7 +67,7 @@ const AvatarBox = styled.div`
 
 const ContentTitle = styled.h2`
   font-size: 1.25em;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 4px;
   color: ${(props) => (props.selected ? 'var(--bg-color-main)' : 'var(--main-color)')};
   justify-self: flex-start;

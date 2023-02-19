@@ -147,7 +147,7 @@ function SignUpForm() {
 
 const FormTitle = styled.h1`
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 1px;
   text-align: center;
   margin: 0.5rem 0;
@@ -163,7 +163,7 @@ const LoginSpan = styled.p`
   span {
     margin-left: 0.5rem;
     color: var(--danger);
-    font-weight: 600;
+    font-weight: 500;
     text-transform: capitalize;
     cursor: pointer;
 

@@ -78,7 +78,7 @@ const TimeBox = styled(Box)`
 
 const ContentTitle = styled.h2`
   font-size: 1.25em;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 4px;
   color: var(--main-color);
 `;
@@ -111,7 +111,7 @@ const ContentUnread = styled.span`
   border-radius: 50%;
   background-color: ${(props) => (props.theme.mode === 'dark' ? 'var(--secondary)' : 'var(--warning)')};
   font-size: 0.5em;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--bg-color-main);
 `;
 

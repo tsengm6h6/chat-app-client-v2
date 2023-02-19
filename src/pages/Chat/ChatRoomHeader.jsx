@@ -95,6 +95,7 @@ const HeaderName = styled.h2`
   grid-column: 2 / 4;
   grid-row: 1 / 3;
   font-size: 1.25rem;
+  font-weight: 500;
   justify-self: center;
   cursor: ${(props) => (props.isRoom ? 'pointer' : 'default')};
 `;

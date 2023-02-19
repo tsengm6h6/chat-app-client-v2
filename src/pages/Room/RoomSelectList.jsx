@@ -60,6 +60,7 @@ const GroupTitle = styled.h3`
   align-self: flex-end;
   padding-left: 1rem;
   font-size: 1.25rem;
+  font-weight: 500;
   color: var(--main-color);
   text-transform: capitalize;
 

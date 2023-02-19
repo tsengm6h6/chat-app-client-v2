@@ -68,6 +68,7 @@ const Text = styled.p`
   border-radius: 20px;
   border-top-left-radius: 4px;
   max-width: 55%;
+  font-weight: 400;
 
   &.self {
     border-top-right-radius: 4px;
@@ -90,7 +91,7 @@ const Status = styled.span`
 
 const Time = styled.p`
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 4px;
 `;
 

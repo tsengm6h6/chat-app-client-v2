@@ -113,7 +113,7 @@ const NavImage = styled.img`
 
 const NavBrand = styled.h1`
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 900;
   letter-spacing: 1px;
   display: none;
 

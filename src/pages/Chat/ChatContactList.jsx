@@ -59,6 +59,15 @@ const List = styled.div`
   max-width: 480px;
   height: 100%;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    background-color: var(--bg-color-main);
+    width: 6px;
+    &-thumb {
+      background-color: var(--bg-color-darken);
+      border-radius: 8px;
+    }
+  }
 `;
 
 const ListGroup = styled.ul`
@@ -71,6 +80,7 @@ const ListGroup = styled.ul`
 
 const GroupTitle = styled.h3`
   font-size: 1rem;
+  font-weight: 500;
   color: var(--main-color);
   align-self: flex-start;
   margin-bottom: 4px;

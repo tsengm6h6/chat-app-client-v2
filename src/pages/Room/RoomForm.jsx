@@ -100,7 +100,7 @@ const FormContainer = styled(Container)`
 
 const FormTitle = styled.h1`
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 1px;
   text-align: center;
   margin: 0.5rem 0;
