@@ -21,10 +21,12 @@ function LoginForm() {
   const { error, isLoading, sendRequest: postLogin } = useAxios();
 
   useEffect(() => {
-    if (error) {
+    if (error?.errors) {
       error.errors.forEach((e) => {
         errorToast(e.msg);
       });
+    } else if (error?.message) {
+      errorToast(error.message);
     }
   }, [error]);
 

@@ -9,7 +9,7 @@ import { useAxios } from '../../hooks/useAxios';
 import { errorToast, warningToast } from '../../utils/toastify';
 import { authAPI } from '../../api';
 import { useAuthContext } from '../../context/AuthContext';
-import { avatarGenerator } from '../../utils/avatarGenerator';
+import { useAvatar } from '../../hooks/useAvatar';
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
@@ -22,24 +22,25 @@ function SignUpForm() {
   const { setUser, setToken } = useAuthContext();
 
   const { error: submitError, isLoading: submitLoading, sendRequest: postRegister } = useAxios();
-  const { error: avatarError, isLoading: avatarLoading, sendRequest: fetchRandomAvatar } = useAxios();
+  const { error: avatarError, isLoading: avatarLoading, fetchAvatar } = useAvatar();
 
   useEffect(() => {
-    if (submitError) {
+    if (submitError?.errors) {
       submitError.errors.forEach((e) => {
         errorToast(e.msg);
       });
+    } else if (submitError?.message) {
+      errorToast(submitError.message);
     }
   }, [submitError]);
 
-  const generateAvatar = useCallback(() => {
-    avatarGenerator(fetchRandomAvatar, (avatar) => {
-      setFormData((prev) => ({
-        ...prev,
-        avatarImage: avatar
-      }));
-    });
-  }, [fetchRandomAvatar]);
+  const generateAvatar = useCallback(async () => {
+    const avatar = await fetchAvatar();
+    setFormData((prev) => ({
+      ...prev,
+      avatarImage: avatar
+    }));
+  }, [fetchAvatar]);
 
   const submitValidator = () => {
     const { username, email, password, confirmPassword, avatarImage } = formData;

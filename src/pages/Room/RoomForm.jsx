@@ -6,8 +6,7 @@ import AvatarUploader from '../../components/AvatarUploader';
 import { Button, PrimaryButton } from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import styled from 'styled-components';
-import { useAxios } from '../../hooks/useAxios';
-import { avatarGenerator } from '../../utils/avatarGenerator';
+import { useAvatar } from '../../hooks/useAvatar';
 import { warningToast } from '../../utils/toastify';
 import { IoArrowUndo } from 'react-icons/io5';
 
@@ -17,16 +16,15 @@ function RoomForm({ handleRoomCreate, isLoading, toggleShow }) {
     avatarImage: ''
   });
 
-  const { error: avatarError, isLoading: avatarLoading, sendRequest: fetchRandomAvatar } = useAxios();
+  const { error: avatarError, isLoading: avatarLoading, fetchAvatar } = useAvatar();
 
-  const generateAvatar = useCallback(() => {
-    avatarGenerator(fetchRandomAvatar, (avatar) => {
-      setFormData((prev) => ({
-        ...prev,
-        avatarImage: avatar
-      }));
-    });
-  }, [fetchRandomAvatar]);
+  const generateAvatar = useCallback(async () => {
+    const avatar = await fetchAvatar();
+    setFormData((prev) => ({
+      ...prev,
+      avatarImage: avatar
+    }));
+  }, [fetchAvatar]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
