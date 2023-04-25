@@ -64,8 +64,13 @@ password: 12345678
     ```
     yarn install
     ```
-4. Run the app   
--> Please make sure the server for this app is running before step 4, [check here](https://github.com/tsengm6h6/chat-app-server) to setup for the server.
+4. Change .env.example file
+   - change file name to .env
+   - go to https://multiavatar.com to create an account and get your avatar api key
+   - change the VITE_SERVER_URL to your local server port (ex. http://localhost:5000 for server listening to port 5000)
+
+5. Run the app   
+    -> Please make sure the server for this app is running before running the client, [check here](https://github.com/tsengm6h6/chat-app-server) to setup for the server.
     ```
     yarn dev
     ```
