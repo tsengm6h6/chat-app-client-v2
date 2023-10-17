@@ -15,7 +15,7 @@ function ChatRoomInput({ setChatMessages }) {
   const [showNotify, setShowNotify] = useState(false);
 
   const { user } = useAuthContext();
-  const { chatId, chatInfo, updateContactLatestMessage } = useChatContext();
+  const { chatId, chatInfo, updateContactLatestMessage, isMessageSending, setIsMessageSending } = useChatContext();
   const {
     socketValue: { socket, typingNotify }
   } = useSocketContext();
@@ -27,6 +27,7 @@ function ChatRoomInput({ setChatMessages }) {
       setInputMessage('');
       return;
     }
+    setIsMessageSending(true);
     postUserMessage(
       {
         method: 'POST',
@@ -60,6 +61,7 @@ function ChatRoomInput({ setChatMessages }) {
         });
 
         setInputMessage('');
+        setIsMessageSending(false);
       }
     );
   };
@@ -104,11 +106,11 @@ function ChatRoomInput({ setChatMessages }) {
             type="text"
             name="inputMessage"
             placeholder="Type something"
-            value={inputMessage}
+            value={isMessageSending ? '' : inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyUp={handleKeyUp}
           />
-          <RoomInputButton>
+          <RoomInputButton disabled={isMessageSending}>
             <ButtonIconWrapper>
               <IoSend />
             </ButtonIconWrapper>

@@ -18,6 +18,7 @@ function ChatContextProvider({ children }) {
   } = useSocketContext();
   const [chatInfo, setChatInfo] = useLocalStorage('chat-app-chat-info', null);
   const [contacts, setContacts] = useState([]);
+  const [isMessageSending, setIsMessageSending] = useState(false);
 
   const { sendRequest: getUserContacts } = useAxios();
   const { sendRequest: updateReadStatus } = useAxios();
@@ -123,7 +124,9 @@ function ChatContextProvider({ children }) {
         handleChatSelect,
         updateContactLatestMessage,
         updateMessageStatusToRead,
-        fetchUserContacts
+        fetchUserContacts,
+        isMessageSending,
+        setIsMessageSending
       }}
     >
       {children}

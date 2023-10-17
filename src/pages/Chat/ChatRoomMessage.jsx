@@ -5,15 +5,19 @@ import { useChatContext } from '../../context/ChatContext';
 import ChatMessage from '../Chat/ChatMessage';
 
 function ChatRoomMessage({ chatMessages, messageLoading }) {
-  const { chatId } = useChatContext();
+  const { chatId, isMessageSending } = useChatContext();
 
   const msgRef = useRef(null);
+  const sendingRef = useRef();
 
   useEffect(() => {
     if (msgRef.current) {
-      msgRef.current.scrollIntoView();
+      msgRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [chatMessages]);
+    if (sendingRef.current) {
+      sendingRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, isMessageSending]);
 
   const renderedMessage = chatMessages.map((msg) => {
     return <ChatMessage key={msg._id} {...msg} ref={msgRef} />;
@@ -24,7 +28,7 @@ function ChatRoomMessage({ chatMessages, messageLoading }) {
       {chatId ? (
         messageLoading ? (
           <RoomEmptyMessage>Loading...</RoomEmptyMessage>
-        ) : chatMessages.length === 0 ? (
+        ) : chatMessages.length === 0 && !isMessageSending ? (
           <RoomEmptyMessage>Type to start chatting 🚀</RoomEmptyMessage>
         ) : (
           renderedMessage
@@ -32,6 +36,7 @@ function ChatRoomMessage({ chatMessages, messageLoading }) {
       ) : (
         <RoomWelcomeMessage>Select a user to start a chat</RoomWelcomeMessage>
       )}
+      {isMessageSending && <RoomSendingStatus ref={sendingRef}>Sending...</RoomSendingStatus>}
     </RoomMessage>
   );
 }
@@ -61,6 +66,13 @@ const RoomEmptyMessage = styled.div`
 
 const RoomWelcomeMessage = styled(RoomEmptyMessage)`
   font-size: 1.5rem;
+`;
+
+const RoomSendingStatus = styled.p`
+  text-align: center;
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 500;
 `;
 
 export default ChatRoomMessage;
