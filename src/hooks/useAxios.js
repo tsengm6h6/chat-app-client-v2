@@ -3,6 +3,7 @@ import { useAuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { authAPI } from '../api';
 import { errorToast } from '../utils/toastify';
+import { useChatContext } from '../context/ChatContext';
 
 const instance = axios.create({
   baseURL: process.env.VITE_SERVER_URL,
@@ -14,6 +15,8 @@ export const useAxios = () => {
 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { setIsMessageSending } = useChatContext();
 
   const refreshToken = useCallback(
     async (config, cb) => {
@@ -63,12 +66,13 @@ export const useAxios = () => {
           cb(result.data);
         }
       } catch (e) {
+        setIsMessageSending(false);
         e?.response?.status === 403 ? refreshToken(config, cb) : setError(e?.response?.data || e);
       } finally {
         setIsLoading(false);
       }
     },
-    [token, refreshToken]
+    [token, refreshToken, setIsMessageSending]
   );
 
   return { error, isLoading, sendRequest };
